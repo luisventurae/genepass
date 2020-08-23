@@ -17,6 +17,9 @@
     "url": "https://www.linkedin.com/in/luisventurae"
   },
   "license": "MIT",
+  "publishConfig": { 
+    "registry": "https://www.npmjs.com/package/genepass" 
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/luisventurae/genepass.git"
