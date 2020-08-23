@@ -12,8 +12,15 @@
     "node",
     "js"
   ],
-  "author": "Luis Ventura <luisigsystem@gmail.com>",
+  "author": {
+    "name": "Luis Ventura E",
+    "url": "https://www.linkedin.com/in/luisventurae"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luisventurae/genepass.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "nodemon": "^2.0.4"

@@ -1,3 +1,3 @@
-# Password Generator
+# Genepass
 
 Generate a customizable password
