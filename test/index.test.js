@@ -2,5 +2,10 @@
 
 const genepass = require('../src/index');
 
-let text = genepass.write();
-console.log(text);
+let password = genepass.build({
+    length: 10,
+    lowercase: true,
+    // uppercase: true,
+    // number: true,
+});
+console.log(`[${new Date()}]: generando... ${password}`);
