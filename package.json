@@ -1,0 +1,21 @@
+{
+  "name": "genepass",
+  "version": "0.1.0",
+  "description": "Password generator",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "nodemon test/index.test.js"
+  },
+  "keywords": [
+    "password",
+    "generator",
+    "node",
+    "js"
+  ],
+  "author": "Luis Ventura <luisigsystem@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
