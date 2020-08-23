@@ -7,5 +7,6 @@ let password = genepass.build({
     lowercase: true,
     // uppercase: true,
     // number: true,
+    // special: true,
 });
 console.log(`[${new Date()}]: generando... ${password}`);

@@ -1,6 +1,9 @@
 'use strict';
 
-// English Alphabet
+/**
+ * English Alphabet
+ * @type {Array<String>}
+ */
 const _abc_en = [
     'a',
     'b',
@@ -30,7 +33,10 @@ const _abc_en = [
     'z',
 ];
 
-// Spanish Alphabet
+/**
+ * Spanish Alphabet
+ * @type {Array<String>}
+ */
 const _abc_es = [
     'a',
     'b',
@@ -68,7 +74,8 @@ const _abc_es = [
 /**
  * Get a word
  * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} _alphabet? Language alphabet
+ * @param {String} [_alphabet] Language alphabet
+ * @returns {String}
  */
 const _getWord = (_index, _alphabet='en') => {
     // Validation
@@ -89,27 +96,30 @@ const _getWord = (_index, _alphabet='en') => {
     // return '_test';
     if(_index<0||_index>=_maxAlphabets) throw '_index is not a valid number';
     // Logic
-    return this[`${_variName}`][_index]
+    return this[`${_variName}`][_index];
 };
 
 /**
  * Get a word lowercase
  * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} _alphabet? Language alphabet
+ * @param {String} [_alphabet] Language alphabet
+ * @returns {String}
  */
 const _getWordLowerc_ = (_index, _alphabet) => _getWord(_index, _alphabet).toLowerCase();
 
 /**
  * Get a word uppercase
  * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} _alphabet? Language alphabet
+ * @param {String} [_alphabet] Language alphabet
+ * @returns {String}
  */
 const _getWordUpperc_ = (_index, _alphabet) => _getWord(_index, _alphabet).toUpperCase();
 
 /**
  * Get a word random case, maybe lowercase or uppercase
  * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} _alphabet? Language alphabet
+ * @param {String} [_alphabet] Language alphabet
+ * @returns {String}
  */
 const _getWordRandomc_ = (_index, _alphabet) => {
     let _random = Math.floor(Math.random() * (100 - 0)) + 1;
@@ -117,8 +127,19 @@ const _getWordRandomc_ = (_index, _alphabet) => {
     return _getWord(_index, _alphabet)[`${_randomCase}`]();
 };
 
+/**
+ * Get a random integer number
+ * @param {Number}  [_min=0] Minimum number
+ * @param {Number}  [_max=9] Maximum number
+ * @returns {Number}
+ */
+const _getNumber_ = (_min=0, _max=9) => {
+    return Math.floor(Math.random() * (_max - _min)) + 1;
+};
+
 module.exports = {
     _getWordLowerc_,
     _getWordUpperc_,
-    _getWordRandomc_
+    _getWordRandomc_,
+    _getNumber_,
 };
