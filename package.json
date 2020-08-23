@@ -1,6 +1,6 @@
 {
   "name": "genepass",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Password generator",
   "main": "src/index.js",
   "scripts": {
@@ -17,14 +17,13 @@
     "url": "https://www.linkedin.com/in/luisventurae"
   },
   "license": "MIT",
-  "publishConfig": { 
-    "registry": "https://www.npmjs.com/package/genepass" 
+  "engines": {
+    "node": ">=4.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/luisventurae/genepass.git"
   },
-  "dependencies": {},
   "devDependencies": {
     "nodemon": "^2.0.4"
   }
