@@ -20,7 +20,6 @@ const password = genepass.build({
     lowercase: true,
     uppercase: true,
     number: true,
-    special: true,
 });
 ```
 
@@ -48,7 +47,7 @@ const password = genepass.build({
 });
 ```
 
-### Return a difficult password
+<!-- ### Return a difficult password
 ```js
 const genepass = require('genepass');
 
@@ -59,4 +58,4 @@ const password = genepass.build({
     number: true,
     special: true,
 });
-```
+``` -->

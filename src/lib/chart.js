@@ -94,7 +94,7 @@ const _getWord = (_index, _alphabet='en') => {
     }
     _maxAlphabets = this[`${_variName}`].length;
     // return '_test';
-    if(_index<0||_index>=_maxAlphabets) throw '_index is not a valid number';
+    if(_index<0||_index>=_maxAlphabets) throw `${_index} is not a valid value for _index`;
     // Logic
     return this[`${_variName}`][_index];
 };

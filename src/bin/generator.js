@@ -1,6 +1,6 @@
 'use strict';
 
-const { _getWordRandomc_, _getWordLowerc_, _getWordUpperc_ } = require('../lib/chart');
+const { _getWordRandomc_, _getWordLowerc_, _getWordUpperc_, _getNumber_ } = require('../lib/chart');
 
 /**
  * Build a random password
@@ -9,7 +9,6 @@ const { _getWordRandomc_, _getWordLowerc_, _getWordUpperc_ } = require('../lib/c
  * @param {Boolean} [options.lowercase] At least one lowercase
  * @param {Boolean} [options.uppercase] At least one uppercase
  * @param {Boolean} [options.number] At least one number
- * @param {Boolean} [options.special] At least one special character
  * @returns {String} Password generated
  * @example Just lowercase password
  * // returns abcde
@@ -26,7 +25,7 @@ const build = (options = {
     lowercase,
     uppercase,
     number,
-    special,
+    // special,
 }) => {
     const _options = options
     return _validations(_options, () => _logic(_options));
@@ -61,13 +60,43 @@ const _validations = (_options, _next) => {
  */
 const _logic = (_options) => {
     let _passwsord = '';
-    let _optionsFn = [];
-    
+    let _exists = [
+        { _lowerCase: false },
+        { _upperCase: false },
+        { _number: false },
+    ];
+    if(!_options.number) _exists.splice(2, 1);
+    if(!_options.uppercase) _exists.splice(1, 1);
+    if(!_options.lowercase) _exists.splice(0, 1);
+    console.log('_exists',_exists);
+
     for(let i=0; i<_options.length; i++) {
-        _passwsord += _getWordRandomc_(0);
+        for(let _exist of _exists) {
+            if(_exist._lowerCase===false) {
+                let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+                _passwsord += _getWordLowerc_(_randomIndex);
+                _exist._lowerCase = true
+            }
+            else if(_exist._upperCase===false) {
+                let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+                _passwsord += _getWordUpperc_(_randomIndex);
+                _exist._upperCase = true
+            }
+            else if(_exist._number===false) {
+                let _randomIndex = Math.floor(Math.random() * (9 - 0)) + 1;
+                _passwsord += _getNumber_(_randomIndex);
+                _exist._number = true
+            }else{
+                if(_exist._lowerCase!==undefined) _exist._lowerCase = false
+                if(_exist._upperCase!==undefined) _exist._upperCase = false
+                if(_exist._number!==undefined) _exist._number = false
+            }
+        };
     }
     return _passwsord;
 };
+
+
 
 module.exports = {
     build,
