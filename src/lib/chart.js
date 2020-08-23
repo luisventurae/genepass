@@ -112,9 +112,9 @@ const _getWordUpperc_ = (_index, _alphabet) => _getWord(_index, _alphabet).toUpp
  * @param {String} _alphabet? Language alphabet
  */
 const _getWordRandomc_ = (_index, _alphabet) => {
-    let random = Math.floor(Math.random() * (100 - 0)) + 1;
-    let randomCase = random%2===0?'toUpperCase':'toLowerCase';
-    return _getWord(_index, _alphabet)[`${randomCase}`]();
+    let _random = Math.floor(Math.random() * (100 - 0)) + 1;
+    let _randomCase = _random%2===0?'toUpperCase':'toLowerCase';
+    return _getWord(_index, _alphabet)[`${_randomCase}`]();
 };
 
 module.exports = {

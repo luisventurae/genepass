@@ -3,50 +3,53 @@
 const { _getWordRandomc_, _getWordLowerc_, _getWordUpperc_ } = require('../lib/chart');
 
 /**
- * 
+ * Build a random password
  * @param {Object}  options Customizable options
  * @param {Number}  options.length String length
- * @param {Boolean} options.lowercase At least one lowercase
- * @param {Boolean} options.uppercase At least one uppercase
- * @param {Boolean} options.number At least one number
+ * @param {Boolean} options.lowercase? At least one lowercase
+ * @param {Boolean} options.uppercase? At least one uppercase
+ * @param {Boolean} options.number? At least one number
  */
 const build = (options = {
-    length: true,
+    length,
     lowercase: false,
     uppercase: false,
     number: false,
 }) => {
-    return _validations(options, () => _logic(options));
+    const _options = options
+    return _validations(_options, () => _logic(_options));
 };
 
 /**
- * Validation of Customizable options
- * @param {Opject} options Customizable options
+ * Validate Customizable options
+ * @param {Opject} _options Customizable options
  */
-const _validations = (options, next) => {
-    if(typeof options.length!=='number' || options.length<0) 
+const _validations = (_options, next) => {
+    if(typeof _options.length!=='number' || _options.length<0) 
         throw '"length" is not a valid number';
-    if(options.lowercase!==true && options.uppercase!==true && options.number!==true) 
+    if(_options.lowercase!==true && _options.uppercase!==true && _options.number!==true) 
         throw 'At least "lowercase", "uppercase" or "number" must be true';
-    if(options.lowercase!==undefined && typeof options.lowercase!=='boolean')
+    if(_options.lowercase!==undefined && typeof _options.lowercase!=='boolean')
         throw '"lowercase" must be boolean';
-    if(options.uppercase!==undefined && typeof options.uppercase!=='boolean')
+    if(_options.uppercase!==undefined && typeof _options.uppercase!=='boolean')
         throw '"uppercase" must be boolean';
-    if(options.number!==undefined && typeof options.number!=='boolean')
+    if(_options.number!==undefined && typeof _options.number!=='boolean')
         throw '"number" must be boolean';
     return next();
 };
 
 /**
  * Logic for build password
- * @param {Opject} options Customizable options
+ * @param {Opject} _options Customizable options
  */
-const _logic = (options) => {
-    let passwsord = '';
-    for(let i=0; i<options.length; i++) {
-        passwsord += _getWordRandomc_(0);
+const _logic = (_options) => {
+    let _passwsord = '';
+    let _optionsFn = [];
+    
+    for(let i=0; i<_options.length; i++) {
+        _passwsord += _getWordRandomc_(0);
     }
-    return passwsord;
+    return _passwsord;
 };
 
 module.exports = {
