@@ -1,4 +1,4 @@
-# Genepass v1.0.0
+# Genepass v. Demo
 ![Generic badge](https://img.shields.io/badge/Version-1.0.0-green.svg)
 
 Generate a random customizable passwords
@@ -24,7 +24,6 @@ const password = genepass.build({
 ```
 
 # Supported format examples
-"special" mustn't be alone next to "length", but it's possible to use it the next other options.
 
 ### Return a combination lowercase uppercase password and 8 of length
 ```js
