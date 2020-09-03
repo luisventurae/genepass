@@ -1,6 +1,7 @@
 'use strict';
 
 const { _getWordRandomc_, _getWordLowerc_, _getWordUpperc_, _getNumber_ } = require('../lib/chart');
+const { _shuffle_ } = require('../lib/permuter');
 
 /**
  * Build a random password
@@ -95,7 +96,7 @@ const _logic = (_options) => {
             }
         }
     }
-
+    _passwsordGene = _shuffle_(_passwsordGene);
     return _passwsordGene;
 };
 
