@@ -3,9 +3,9 @@
 const genepass = require('../src/index');
 
 let password = genepass.build({
-    length: 2,
+    length: 10,
     lowercase: true,
-    uppercase: true,
+    uppercase: false,
     number: true,
     // special: true,
 });

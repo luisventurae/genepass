@@ -67,11 +67,28 @@ const _logic = (_options) => {
     console.log('_lengthKeys',_lengthKeys);
     console.log('_lengthPass',_lengthPass);
     let _quantitiesChart = [] // { _opt -> Option Name, _qtt -> Quantity }
-    if( _lengthKeys>_lengthPass ) {
+    if( _lengthKeys>=_lengthPass ) {
         console.log('there are less atributtes');
         _quantitiesChart = _keysOptionsNL.map(_key => ({_opt:_key, _qtt:1})).splice(0,_lengthPass);
     }else{
         console.log('there are more atributtes');
+        _quantitiesChart = _keysOptionsNL.map(_key => ({_opt:_key, _qtt:1})).splice(0,_lengthPass);
+        const _add = Math.floor(_lengthPass/_lengthKeys);
+        const _res =_lengthPass%_lengthKeys;
+        console.log('_add',_add);
+        console.log('_res',_res);
+        // Adding equals charts
+        for(let _qC of _quantitiesChart) {
+            _qC._qtt += _add-1;
+        }
+        // Adding residue anywhere
+        if(_res) {
+            for(let _i=0; _i<_res; _i++) {
+                let _index = Math.floor(Math.random() * (_lengthKeys - 1)) + 1;
+                _index -= 1
+                _quantitiesChart[_index]._qtt += 1;
+            }
+        }
     }
     console.log('_quantitiesChart',_quantitiesChart);
 
