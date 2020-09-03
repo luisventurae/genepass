@@ -38,8 +38,8 @@ const build = (options = {
  * @returns {String}
  */
 const _validations = (_options, _next) => {
-    if(typeof _options.length!=='number' || _options.length<0) 
-        throw '"length" is not a valid number';
+    if(typeof _options.length!=='number' || _options.length<0 || _options.length>2048) 
+        throw '"length" is not a valid number, it must be between 0 and 2048';
     if(_options.lowercase!==true && _options.uppercase!==true && _options.number!==true) 
         throw 'At least "lowercase", "uppercase" or "number" must be true';
     if(_options.lowercase!==undefined && typeof _options.lowercase!=='boolean')
@@ -59,41 +59,44 @@ const _validations = (_options, _next) => {
  * @returns {String}
  */
 const _logic = (_options) => {
-    let _passwsord = '';
-    let _exists = [
-        { _lowerCase: false },
-        { _upperCase: false },
-        { _number: false },
-    ];
-    if(!_options.number) _exists.splice(2, 1);
-    if(!_options.uppercase) _exists.splice(1, 1);
-    if(!_options.lowercase) _exists.splice(0, 1);
-    console.log('_exists',_exists);
-
-    for(let i=0; i<_options.length; i++) {
-        for(let _exist of _exists) {
-            if(_exist._lowerCase===false) {
-                let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
-                _passwsord += _getWordLowerc_(_randomIndex);
-                _exist._lowerCase = true
-            }
-            else if(_exist._upperCase===false) {
-                let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
-                _passwsord += _getWordUpperc_(_randomIndex);
-                _exist._upperCase = true
-            }
-            else if(_exist._number===false) {
-                let _randomIndex = Math.floor(Math.random() * (9 - 0)) + 1;
-                _passwsord += _getNumber_(_randomIndex);
-                _exist._number = true
-            }else{
-                if(_exist._lowerCase!==undefined) _exist._lowerCase = false
-                if(_exist._upperCase!==undefined) _exist._upperCase = false
-                if(_exist._number!==undefined) _exist._number = false
-            }
-        };
+    let _passwsordGene = '';
+    const _keysOptionsNL = Object.keys(_options).filter(_key => _options[`${_key}`]&&_key!=='length') // keys option, no length
+    const _lengthKeys = _keysOptionsNL.length;
+    const _lengthPass = _options.length;
+    console.log('_lengthKeys',_lengthKeys);
+    console.log('_lengthPass',_lengthPass);
+    let _quantitiesChart = [] // { _opt -> Option Name, _qtt -> Quantity }
+    if( _lengthKeys>_lengthPass ) {
+        console.log('there are less atributtes');
+        _quantitiesChart = _keysOptionsNL.map(_key => ({_opt:_key, _qtt:1})).splice(0,_lengthPass);
+    }else{
+        console.log('there are more atributtes');
     }
-    return _passwsord;
+    console.log('_quantitiesChart',_quantitiesChart);
+
+    for(let _qC of _quantitiesChart) {
+        for(let _i=0; _i<_qC._qtt; _i++) {
+            switch(_qC._opt) {
+                case 'lowercase': {
+                    let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+                    _passwsordGene += _getWordLowerc_(_randomIndex);
+                    break;
+                }
+                case 'uppercase': {
+                    let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+                    _passwsordGene += _getWordUpperc_(_randomIndex);
+                    break;
+                }
+                case 'number': {
+                    let _randomIndex = Math.floor(Math.random() * (9 - 0)) + 1;
+                    _passwsordGene += _getNumber_(_randomIndex);
+                    break;
+                }
+            }
+        }
+    }
+
+    return _passwsordGene;
 };
 
 
