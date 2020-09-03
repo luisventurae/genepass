@@ -64,19 +64,16 @@ const _logic = (_options) => {
     const _keysOptionsNL = Object.keys(_options).filter(_key => _options[`${_key}`]&&_key!=='length') // keys option, no length
     const _lengthKeys = _keysOptionsNL.length;
     const _lengthPass = _options.length;
-    console.log('_lengthKeys',_lengthKeys);
-    console.log('_lengthPass',_lengthPass);
+    // console.log('_lengthKeys',_lengthKeys);
+    // console.log('_lengthPass',_lengthPass);
+
+    // Build to know how many times per chart
     let _quantitiesChart = [] // { _opt -> Option Name, _qtt -> Quantity }
-    if( _lengthKeys>=_lengthPass ) {
-        console.log('there are less atributtes');
+    _quantitiesChart = _keysOptionsNL.map(_key => ({_opt:_key, _qtt:1})).splice(0,_lengthPass);
+    if( _lengthKeys<_lengthPass ) {
         _quantitiesChart = _keysOptionsNL.map(_key => ({_opt:_key, _qtt:1})).splice(0,_lengthPass);
-    }else{
-        console.log('there are more atributtes');
-        _quantitiesChart = _keysOptionsNL.map(_key => ({_opt:_key, _qtt:1})).splice(0,_lengthPass);
-        const _add = Math.floor(_lengthPass/_lengthKeys);
-        const _res =_lengthPass%_lengthKeys;
-        console.log('_add',_add);
-        console.log('_res',_res);
+        const _add = Math.floor(_lengthPass/_lengthKeys); // To know how many has to have every _qtt
+        const _res =_lengthPass%_lengthKeys; // To know how many has to add for residue
         // Adding equals charts
         for(let _qC of _quantitiesChart) {
             _qC._qtt += _add-1;
@@ -90,7 +87,7 @@ const _logic = (_options) => {
             }
         }
     }
-    console.log('_quantitiesChart',_quantitiesChart);
+    // console.log('_quantitiesChart',_quantitiesChart);
 
     for(let _qC of _quantitiesChart) {
         for(let _i=0; _i<_qC._qtt; _i++) {

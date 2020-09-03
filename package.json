@@ -1,6 +1,6 @@
 {
   "name": "genepass",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Password generator",
   "main": "src/index.js",
   "scripts": {
