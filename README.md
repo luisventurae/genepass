@@ -22,6 +22,16 @@ const password = genepass.build({
     number: true,
 });
 ```
+# Supported attributes
+| Attribute | Data Type | Description | Required | Default |
+| --- | --- | --- | --- | --- |
+| length | `Number` | Length of password generated, between 0 and 2048 | `true` | - |
+| lowercase | `Boolean` | At least one lowercase word in the password generated | `false` | `false` |
+| uppercase | `Boolean` | At least one uppercase word in the password generated | `false` | `false` |
+| number | `Boolean` | At least one number in the password generated | `false` | `false` |
+
+## Important
+Is necesary choose one of attribute apart of `length`.
 
 # Supported format examples
 

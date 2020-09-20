@@ -17,9 +17,6 @@ const { _shuffle_ } = require('../lib/permuter');
  * @example Just number pin
  * // returns 9854
  * build({length:4, number:true});
- * @example Extreme password
- * // returns d4fg6E%df4#Ff_Tdg5df[|g4GBaHht_d
- * build({length:32, lowercase:true, uppercase:true, number:true, special:true});
  */
 const build = (options = {
     length,
