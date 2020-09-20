@@ -17,6 +17,9 @@ const { _shuffle_ } = require('../lib/permuter');
  * @example Just number pin
  * // returns 9854
  * build({length:4, number:true});
+ * @example Extreme password
+ * // returns d4fg6E%df4#Ff_Tdg5df[|g4GBaHht_d
+ * build({length:32, lowercase:true, uppercase:true, number:true, special:true});
  */
 const build = (options = {
     length,
@@ -37,17 +40,17 @@ const build = (options = {
  */
 const _validations = (_options, _next) => {
     if(typeof _options.length!=='number' || _options.length<0 || _options.length>2048) 
-        throw '"length" is not a valid number, it must be between 0 and 2048';
+        throw new RangeError('"length" is not a valid number, it must be between 0 and 2048');
     if(_options.lowercase!==true && _options.uppercase!==true && _options.number!==true) 
         throw 'At least "lowercase", "uppercase" or "number" must be true';
     if(_options.lowercase!==undefined && typeof _options.lowercase!=='boolean')
-        throw '"lowercase" must be boolean';
+        throw new TypeError('"lowercase" must be boolean');
     if(_options.uppercase!==undefined && typeof _options.uppercase!=='boolean')
-        throw '"uppercase" must be boolean';
+        throw new TypeError('"uppercase" must be boolean');
     if(_options.number!==undefined && typeof _options.number!=='boolean')
-        throw '"number" must be boolean';
+        throw new TypeError('"number" must be boolean');
     if(_options.special!==undefined && typeof _options.special!=='boolean')
-        throw '"special" must be boolean';
+        throw new TypeError('"special" must be boolean');
     return _next();
 };
 

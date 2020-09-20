@@ -31,7 +31,7 @@ const password = genepass.build({
 | number | `Boolean` | At least one number in the password generated | `false` | `false` |
 
 ## Important
-Is necesary choose one of attribute apart of `length`.
+It is necesary choose one of attribute apart of `length`.
 
 # Supported format examples
 
