@@ -1,4 +1,4 @@
-# Genepass v1.0.1
+# Genepass v2.0.0
 ![Generic badge](https://img.shields.io/badge/Version-1.0.1-green.svg)
 
 Generate a random customizable passwords
@@ -22,6 +22,11 @@ const password = genepass.build({
     number: true,
     special: true,
 });
+
+/**
+ * Return example
+ * password = "!UghH1!#e21T"
+ * /
 ```
 # Supported attributes
 | Attribute | Data Type | Description | Required | Default |
@@ -50,7 +55,7 @@ const password = genepass.build({
 
 /**
  * Return example
- * password = "kdjByRIMrLyX"
+ * password = "ReyDFHbp"
  * /
 ```
 
@@ -65,7 +70,7 @@ const password = genepass.build({
 
 /**
  * Return example
- * password = "73081463"
+ * password = "218152"
  * /
 ```
 
@@ -83,6 +88,6 @@ const password = genepass.build({
 
 /**
  * Return example
- * password = "fv#t8%5N1HlWB#%?oDC=!Y12g1i4#4qO"
+ * password = "t13Yq#Kb1D%%pF%SM@121%4#k!jjTq1Q"
  * /
 ```
