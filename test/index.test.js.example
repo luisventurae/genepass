@@ -1,17 +1,17 @@
-'use strict'
+"use strict";
 
 /**
  * To test thid module, run:
  * node test/index.test.js
  */
 
-const genepass = require('../src/index');
+const genepass = require("../dist/main");
 
 let password = genepass.build({
-    length: 1200,
-    lowercase: true,
-    uppercase: true,
-    number: true,
-    // special: true,
+  length: 1200,
+  lowercase: true,
+  uppercase: true,
+  number: true,
+  // special: true,
 });
 console.log(`[${new Date()}]: generando... ${password}`);
