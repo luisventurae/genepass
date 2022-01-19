@@ -1,4 +1,4 @@
-type language = "es" | "en";
+type language = "symbol" | "es" | "en";
 // enum languages {
 //   "en" = "_abc_en",
 //   "es" = "_abc_es",
@@ -74,6 +74,8 @@ const _abc_es: string[] = [
   "z",
 ];
 
+const _symbols: string[] = ["$", "%", "@", "=", "!", "?", "#"];
+
 /**
  * Get a word
  * @param {Number} _index Index for a word in asc alphabetic
@@ -85,6 +87,9 @@ const _getWord = (_index: number, _alphabet: language = "en"): string => {
   let _maxAlphabets: number;
   let alphabetUsed: Array<string>;
   switch (_alphabet) {
+    case "symbol":
+      alphabetUsed = _symbols;
+      break;
     case "en":
       alphabetUsed = _abc_en;
       break;
@@ -92,12 +97,14 @@ const _getWord = (_index: number, _alphabet: language = "en"): string => {
       alphabetUsed = _abc_es;
       break;
     default:
-      throw "_alphabet is not available";
+      throw new Error("_alphabet is not available");
   }
   _maxAlphabets = alphabetUsed.length;
   // return '_test';
   if (_index < 0 || _index >= _maxAlphabets)
-    throw `${_index} is not a valid value for _index in ${_alphabet}`;
+    throw new Error(
+      `${_index} is not a valid value for _index in ${_alphabet}`
+    );
   // Logic
   return alphabetUsed[_index];
 };
@@ -143,4 +150,23 @@ const _getNumber_ = (_min: number = 0, _max: number = 9): number => {
   return Math.floor(Math.random() * (_max - _min)) + 1;
 };
 
-export { _getWordLowerc_, _getWordUpperc_, _getWordRandomc_, _getNumber_ };
+/**
+ * Get a random integer number
+ * @param {Number}  [_min=0] Minimum number
+ * @param {Number}  [_max=6] Maximum number
+ * @returns {Number}
+ */
+const _getSpecial_ = (_index: number): string => {
+  if (_index > _symbols.length - 1) {
+    throw new RangeError(`max index allowed is ${_symbols.length - 1}, got ${_index}`);
+  }
+  return _getWord(_index, "symbol");
+};
+
+export {
+  _getWordLowerc_,
+  _getWordUpperc_,
+  _getWordRandomc_,
+  _getNumber_,
+  _getSpecial_,
+};

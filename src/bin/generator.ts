@@ -3,6 +3,7 @@ import {
   _getWordLowerc_,
   _getWordUpperc_,
   _getNumber_,
+  _getSpecial_,
 } from "../lib/chart";
 import { _shuffle_ } from "../lib/permuter";
 
@@ -11,6 +12,7 @@ interface options {
   lowercase?: boolean;
   uppercase?: boolean;
   number?: boolean;
+  special?: boolean;
 }
 
 enum sizes {
@@ -52,30 +54,11 @@ const _validations = (_options: options, _next: any): string => {
     typeof _options.length !== "number" ||
     _options.length < sizes.min ||
     _options.length > sizes.max
-  )
+  ) {
     throw new RangeError(
       `"length" is not a valid number, it must be between ${sizes.min} and ${sizes.max}`
     );
-  if (
-    _options.lowercase !== true &&
-    _options.uppercase !== true &&
-    _options.number !== true
-  )
-    throw 'At least "lowercase", "uppercase" or "number" must be true';
-  if (
-    _options.lowercase !== undefined &&
-    typeof _options.lowercase !== "boolean"
-  )
-    throw new TypeError('"lowercase" must be boolean');
-  if (
-    _options.uppercase !== undefined &&
-    typeof _options.uppercase !== "boolean"
-  )
-    throw new TypeError('"uppercase" must be boolean');
-  if (_options.number !== undefined && typeof _options.number !== "boolean")
-    throw new TypeError('"number" must be boolean');
-  // if (_options.special !== undefined && typeof _options.special !== "boolean")
-  //   throw new TypeError('"special" must be boolean');
+  }
   return _next();
 };
 
@@ -131,8 +114,14 @@ const _logic = (_options: options | any): string => {
           break;
         }
         case "number": {
-          let _randomIndex = Math.floor(Math.random() * (9 - 0)) + 1;
+          let _randomIndex = Math.floor(Math.random() * (100 - 0)) + 1;
+          _randomIndex = Math.round(_randomIndex / 10);
           _passwsordGene += _getNumber_(_randomIndex);
+          break;
+        }
+        case "special": {
+          let _randomIndex = Math.floor(Math.random() * (6 - 0)) + 1;
+          _passwsordGene += _getSpecial_(_randomIndex);
           break;
         }
       }
