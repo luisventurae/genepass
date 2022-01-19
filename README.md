@@ -20,18 +20,21 @@ const password = genepass.build({
     lowercase: true,
     uppercase: true,
     number: true,
+    special: true,
 });
 ```
 # Supported attributes
 | Attribute | Data Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| length | `Number` | Length of password generated, between 0 and 2048 | `true` | - |
-| lowercase | `Boolean` | At least one lowercase word in the password generated | `false` | `false` |
-| uppercase | `Boolean` | At least one uppercase word in the password generated | `false` | `false` |
-| number | `Boolean` | At least one number in the password generated | `false` | `false` |
+| length | `Number` | Length of generated password, between 0 and 2048 | `true` | - |
+| lowercase | `Boolean` | At least one lowercase word in the generated password  | `false` | `false` |
+| uppercase | `Boolean` | At least one uppercase word in the generated password | `false` | `false` |
+| number | `Boolean` | At least one number in the generated password | `false` | `false` |
+| special | `Boolean` | At least one special character in the generated password. Could include: `$`, `%`, `@`, `!`, `?`, `#` | `false` | `false` |
 
 ## Important
-It is necesary choose one of attribute apart of `length`.
+- `length` attribute is required
+- It is necesary choose one of attribute apart of `length`.
 
 # Supported format examples
 
@@ -44,6 +47,11 @@ const password = genepass.build({
     lowercase: true,
     uppercase: true,
 });
+
+/**
+ * Return example
+ * password = "kdjByRIMrLyX"
+ * /
 ```
 
 ### Return a PIN and 6 of length
@@ -54,9 +62,14 @@ const password = genepass.build({
     length: 6,
     number: true,
 });
+
+/**
+ * Return example
+ * password = "73081463"
+ * /
 ```
 
-<!-- ### Return a difficult password
+### Return a hard password
 ```js
 const genepass = require('genepass');
 
@@ -67,4 +80,9 @@ const password = genepass.build({
     number: true,
     special: true,
 });
-``` -->
+
+/**
+ * Return example
+ * password = "fv#t8%5N1HlWB#%?oDC=!Y12g1i4#4qO"
+ * /
+```

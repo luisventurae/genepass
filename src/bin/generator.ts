@@ -120,7 +120,7 @@ const _logic = (_options: options | any): string => {
           break;
         }
         case "special": {
-          let _randomIndex = Math.floor(Math.random() * (6 - 0)) + 1;
+          let _randomIndex = Math.floor(Math.random() * (5 - 0)) + 1;
           _passwsordGene += _getSpecial_(_randomIndex);
           break;
         }

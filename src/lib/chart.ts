@@ -74,7 +74,7 @@ const _abc_es: string[] = [
   "z",
 ];
 
-const _symbols: string[] = ["$", "%", "@", "=", "!", "?", "#"];
+const _symbols: string[] = ["$", "%", "@", "!", "?", "#"];
 
 /**
  * Get a word
@@ -158,7 +158,9 @@ const _getNumber_ = (_min: number = 0, _max: number = 9): number => {
  */
 const _getSpecial_ = (_index: number): string => {
   if (_index > _symbols.length - 1) {
-    throw new RangeError(`max index allowed is ${_symbols.length - 1}, got ${_index}`);
+    throw new RangeError(
+      `max index allowed is ${_symbols.length - 1}, got ${_index}`
+    );
   }
   return _getWord(_index, "symbol");
 };
