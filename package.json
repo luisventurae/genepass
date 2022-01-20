@@ -1,10 +1,10 @@
 {
   "name": "genepass",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Password generator",
-  "main": "src/index.js",
+  "main": "dist/main.js",
   "scripts": {
-    "test": "nodemon test/index.test.js"
+    "test": "node test/index.test.js"
   },
   "keywords": [
     "password",
@@ -23,8 +23,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/luisventurae/genepass.git"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
   }
 }
