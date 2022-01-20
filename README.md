@@ -1,5 +1,5 @@
-# Genepass v2.0.0
-![Generic badge](https://img.shields.io/badge/Version-2.0.0-green.svg)
+# Genepass v2.0.1
+![Generic badge](https://img.shields.io/badge/Version-2.0.1-green.svg)
 
 Generate a random customizable passwords
 
