@@ -4,7 +4,7 @@
 Generate a random customizable passwords
 
 # Security
-Since v2.1.0, password generation uses Node's `crypto.randomInt` (a cryptographically secure PRNG) instead of `Math.random()`. Requires Node.js `>=14.10.0`.
+Since v2.1.0, password generation is cryptographically secure. Requires Node.js `>=14.10.0`.
 
 # Installation
 Using npm
