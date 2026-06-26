@@ -122,3 +122,6 @@ const password = genepass.build({
  * password = "t13Yq#Kb1D%%pF%SM@121%4#k!jjTq1Q"
  * /
 ```
+
+# Contributing
+Want to contribute or understand how the project is built internally? See [MAINTAINERS.md](./MAINTAINERS.md).

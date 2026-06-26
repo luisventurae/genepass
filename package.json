@@ -4,6 +4,11 @@
   "description": "Password generator",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
