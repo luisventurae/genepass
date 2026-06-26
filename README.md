@@ -11,6 +11,13 @@ Using npm
 ```bash
 $ npm i --save genepass
 ```
+
+# JavaScript & TypeScript
+Genepass works out of the box in both JavaScript and TypeScript projects.
+It's written in TypeScript and ships compiled CommonJS JS plus its own
+`.d.ts` type declarations — no `@types/genepass` package needed, and no
+extra setup required either way.
+
 # Usage
 In Node.js
 
