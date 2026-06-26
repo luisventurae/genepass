@@ -8,7 +8,7 @@ import {
 import { _shuffle_ } from "../lib/permuter";
 import { _secureRandomInt_ } from "../lib/random";
 
-interface options {
+export interface options {
   length: number;
   lowercase?: boolean;
   uppercase?: boolean;
@@ -141,4 +141,5 @@ const _logic = (_options: options | any): string => {
   return _passwsordGene;
 };
 
+export { build };
 export default { build };

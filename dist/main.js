@@ -1,6 +1,4 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const generator_1 = __importDefault(require("./bin/generator"));
-module.exports = generator_1.default;
+const generator_1 = require("./bin/generator");
+const builder_1 = require("./bin/builder");
+module.exports = { build: generator_1.build, create: builder_1.create, Builder: builder_1.Builder };

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.build = void 0;
 const chart_1 = require("../lib/chart");
 const permuter_1 = require("../lib/permuter");
 const random_1 = require("../lib/random");
@@ -30,6 +31,7 @@ const build = (options) => {
     const _options = options;
     return _validations(_options, () => _logic(_options));
 };
+exports.build = build;
 /**
  * Validate Customizable options
  * @param {Opject}      _options Customizable options

@@ -31,6 +31,27 @@ const password = genepass.build({
  * password = "!UghH1!#e21T"
  * /
 ```
+
+### Method chaining (fluent builder)
+The same engine and validation rules are also available through a chainable API. Use whichever style fits your code better — both are fully interchangeable.
+```js
+const genepass = require('genepass');
+
+const password = genepass.create()
+    .length(12) // Required attribute
+    .lowercase()
+    .uppercase()
+    .number()
+    .special()
+    .build();
+
+/**
+ * Return example
+ * password = "!UghH1!#e21T"
+ * /
+```
+`genepass.Builder` is also exported directly, so `new genepass.Builder()` works the same as `genepass.create()`.
+
 # Supported attributes
 | Attribute | Data Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |

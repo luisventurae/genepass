@@ -68,6 +68,36 @@ _test_("two consecutive calls with the same options are not identical (CSPRNG sa
   assert.notStrictEqual(a, b);
 });
 
+_test_("create().build() (chained API) returns a password of the requested length and categories", () => {
+  const password = genepass
+    .create()
+    .length(20)
+    .lowercase()
+    .uppercase()
+    .number()
+    .special()
+    .build();
+  assert.strictEqual(typeof password, "string");
+  assert.strictEqual(password.length, 20);
+  assert.ok(/[a-z]/.test(password), "missing lowercase character");
+  assert.ok(/[A-Z]/.test(password), "missing uppercase character");
+  assert.ok(/[0-9]/.test(password), "missing number character");
+  assert.ok(/[$%@!?#]/.test(password), "missing special character");
+});
+
+_test_("new Builder() instantiated directly behaves the same as create()", () => {
+  const password = new genepass.Builder().length(8).number().build();
+  assert.match(password, /^[0-9]{8}$/);
+});
+
+_test_("chained API and legacy API produce equally shaped output for the same options", () => {
+  const legacy = genepass.build({ length: 6, number: true });
+  const chained = genepass.create().length(6).number().build();
+  assert.strictEqual(legacy.length, chained.length);
+  assert.match(legacy, /^[0-9]{6}$/);
+  assert.match(chained, /^[0-9]{6}$/);
+});
+
 // ---------------------------------------------------------------------------
 // Fail path
 // ---------------------------------------------------------------------------
@@ -92,4 +122,28 @@ _test_("throws RangeError when no character-type option is selected", () => {
   assert.throws(() => genepass.build({ length: 10 }), RangeError);
 });
 
-console.log("\nAll genepass.build() tests passed.");
+_test_("create().build() throws RangeError when 'length' was never set", () => {
+  assert.throws(() => genepass.create().build(), RangeError);
+});
+
+_test_("create().build() throws RangeError when no character-type option is selected", () => {
+  assert.throws(() => genepass.create().length(10).build(), RangeError);
+});
+
+_test_("legacy and chained API throw the exact same error message (shared validation rules)", () => {
+  let legacyMessage;
+  let chainedMessage;
+  try {
+    genepass.build({ length: 10 });
+  } catch (error) {
+    legacyMessage = error.message;
+  }
+  try {
+    genepass.create().length(10).build();
+  } catch (error) {
+    chainedMessage = error.message;
+  }
+  assert.strictEqual(legacyMessage, chainedMessage);
+});
+
+console.log("\nAll genepass tests passed.");

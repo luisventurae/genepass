@@ -1,3 +1,4 @@
-import _generator from "./bin/generator";
+import { build } from "./bin/generator";
+import { Builder, create } from "./bin/builder";
 
-export = _generator;
+export = { build, create, Builder };
