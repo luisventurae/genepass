@@ -1,7 +1,10 @@
-# Genepass v2.0.1
-![Generic badge](https://img.shields.io/badge/Version-2.0.1-green.svg)
+# Genepass v2.1.0
+![Generic badge](https://img.shields.io/badge/Version-2.1.0-green.svg)
 
 Generate a random customizable passwords
+
+# Security
+Since v2.1.0, password generation uses Node's `crypto.randomInt` (a cryptographically secure PRNG) instead of `Math.random()`. Requires Node.js `>=14.10.0`.
 
 # Installation
 Using npm

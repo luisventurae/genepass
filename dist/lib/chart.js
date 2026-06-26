@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._getSpecial_ = exports._getNumber_ = exports._getWordRandomc_ = exports._getWordUpperc_ = exports._getWordLowerc_ = void 0;
+const random_1 = require("./random");
 // enum languages {
 //   "en" = "_abc_en",
 //   "es" = "_abc_es",
@@ -128,7 +129,7 @@ exports._getWordUpperc_ = _getWordUpperc_;
  * @returns {String}
  */
 const _getWordRandomc_ = (_index, _alphabet) => {
-    const _random = Math.floor(Math.random() * (100 - 0)) + 1;
+    const _random = (0, random_1._secureRandomInt_)(0, 2);
     return _random % 2 === 0
         ? _getWord(_index, _alphabet).toUpperCase()
         : _getWord(_index, _alphabet).toLowerCase();
@@ -141,7 +142,8 @@ exports._getWordRandomc_ = _getWordRandomc_;
  * @returns {Number}
  */
 const _getNumber_ = (_min = 0, _max = 9) => {
-    return Math.floor(Math.random() * (_max - _min)) + 1;
+    const _range = Math.max(_max - _min, 1);
+    return (0, random_1._secureRandomInt_)(1, _range + 1);
 };
 exports._getNumber_ = _getNumber_;
 /**

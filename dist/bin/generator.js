@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const chart_1 = require("../lib/chart");
 const permuter_1 = require("../lib/permuter");
+const random_1 = require("../lib/random");
 var sizes;
 (function (sizes) {
     sizes[sizes["min"] = 0] = "min";
@@ -71,8 +72,7 @@ const _logic = (_options) => {
         // Adding residue anywhere
         if (_res) {
             for (let _i = 0; _i < _res; _i++) {
-                let _index = Math.floor(Math.random() * (_lengthKeys - 1)) + 1;
-                _index -= 1;
+                let _index = (0, random_1._secureRandomInt_)(0, _lengthKeys - 1);
                 _quantitiesChart[_index]._qtt += 1;
             }
         }
@@ -81,23 +81,23 @@ const _logic = (_options) => {
         for (let _i = 0; _i < _qC._qtt; _i++) {
             switch (_qC._opt) {
                 case "lowercase": {
-                    let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+                    let _randomIndex = (0, random_1._secureRandomInt_)(1, 26);
                     _passwsordGene += (0, chart_1._getWordLowerc_)(_randomIndex);
                     break;
                 }
                 case "uppercase": {
-                    let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+                    let _randomIndex = (0, random_1._secureRandomInt_)(1, 26);
                     _passwsordGene += (0, chart_1._getWordUpperc_)(_randomIndex);
                     break;
                 }
                 case "number": {
-                    let _randomIndex = Math.floor(Math.random() * (100 - 0)) + 1;
+                    let _randomIndex = (0, random_1._secureRandomInt_)(1, 101);
                     _randomIndex = Math.round(_randomIndex / 10);
                     _passwsordGene += (0, chart_1._getNumber_)(_randomIndex);
                     break;
                 }
                 case "special": {
-                    let _randomIndex = Math.floor(Math.random() * (5 - 0)) + 1;
+                    let _randomIndex = (0, random_1._secureRandomInt_)(1, 6);
                     _passwsordGene += (0, chart_1._getSpecial_)(_randomIndex);
                     break;
                 }

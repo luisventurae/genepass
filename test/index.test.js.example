@@ -1,17 +1,40 @@
 "use strict";
 
 /**
- * To test thid module, run:
+ * To test this module, run:
+ * cp test/index.test.js.example test/index.test.js
  * node test/index.test.js
  */
 
+const assert = require("assert");
 const genepass = require("../dist/main");
 
-let password = genepass.build({
-  length: 1200,
+// 1. Largo correcto y tipo string
+const _basic = genepass.build({ length: 12, lowercase: true });
+assert.strictEqual(typeof _basic, "string", "build() debe retornar un string");
+assert.strictEqual(_basic.length, 12, "El largo del password debe respetar 'length'");
+
+// 2. Respeta las opciones: solo numeros
+const _pin = genepass.build({ length: 6, number: true });
+assert.match(_pin, /^[0-9]{6}$/, "Con 'number:true' solo debe contener digitos");
+
+// 3. Respeta las opciones: combinacion completa
+const _full = genepass.build({
+  length: 64,
   lowercase: true,
   uppercase: true,
   number: true,
-  // special: true,
+  special: true,
 });
-console.log(`[${new Date()}]: generando... ${password}`);
+assert.strictEqual(_full.length, 64);
+assert.ok(/[a-z]/.test(_full), "Debe contener al menos una minuscula");
+assert.ok(/[A-Z]/.test(_full), "Debe contener al menos una mayuscula");
+assert.ok(/[0-9]/.test(_full), "Debe contener al menos un numero");
+assert.ok(/[$%@!?#]/.test(_full), "Debe contener al menos un caracter especial");
+
+// 4. Sanity check de aleatoriedad: dos llamadas no deben ser identicas
+const _runA = genepass.build({ length: 64, lowercase: true, uppercase: true, number: true, special: true });
+const _runB = genepass.build({ length: 64, lowercase: true, uppercase: true, number: true, special: true });
+assert.notStrictEqual(_runA, _runB, "Dos llamadas consecutivas no deberian producir el mismo password");
+
+console.log("OK: todos los checks de genepass.build() pasaron correctamente.");

@@ -1,3 +1,5 @@
+import { _secureRandomInt_ } from "./random";
+
 type language = "symbol" | "es" | "en";
 // enum languages {
 //   "en" = "_abc_en",
@@ -134,7 +136,7 @@ const _getWordUpperc_ = (_index: number, _alphabet?: language): string =>
  * @returns {String}
  */
 const _getWordRandomc_ = (_index: number, _alphabet: language): string => {
-  const _random: number = Math.floor(Math.random() * (100 - 0)) + 1;
+  const _random: number = _secureRandomInt_(0, 2);
   return _random % 2 === 0
     ? _getWord(_index, _alphabet).toUpperCase()
     : _getWord(_index, _alphabet).toLowerCase();
@@ -147,7 +149,8 @@ const _getWordRandomc_ = (_index: number, _alphabet: language): string => {
  * @returns {Number}
  */
 const _getNumber_ = (_min: number = 0, _max: number = 9): number => {
-  return Math.floor(Math.random() * (_max - _min)) + 1;
+  const _range: number = Math.max(_max - _min, 1);
+  return _secureRandomInt_(1, _range + 1);
 };
 
 /**

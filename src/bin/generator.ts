@@ -6,6 +6,7 @@ import {
   _getSpecial_,
 } from "../lib/chart";
 import { _shuffle_ } from "../lib/permuter";
+import { _secureRandomInt_ } from "../lib/random";
 
 interface options {
   length: number;
@@ -93,8 +94,7 @@ const _logic = (_options: options | any): string => {
     // Adding residue anywhere
     if (_res) {
       for (let _i = 0; _i < _res; _i++) {
-        let _index = Math.floor(Math.random() * (_lengthKeys - 1)) + 1;
-        _index -= 1;
+        let _index = _secureRandomInt_(0, _lengthKeys - 1);
         _quantitiesChart[_index]._qtt += 1;
       }
     }
@@ -104,23 +104,23 @@ const _logic = (_options: options | any): string => {
     for (let _i = 0; _i < _qC._qtt; _i++) {
       switch (_qC._opt) {
         case "lowercase": {
-          let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+          let _randomIndex = _secureRandomInt_(1, 26);
           _passwsordGene += _getWordLowerc_(_randomIndex);
           break;
         }
         case "uppercase": {
-          let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+          let _randomIndex = _secureRandomInt_(1, 26);
           _passwsordGene += _getWordUpperc_(_randomIndex);
           break;
         }
         case "number": {
-          let _randomIndex = Math.floor(Math.random() * (100 - 0)) + 1;
+          let _randomIndex = _secureRandomInt_(1, 101);
           _randomIndex = Math.round(_randomIndex / 10);
           _passwsordGene += _getNumber_(_randomIndex);
           break;
         }
         case "special": {
-          let _randomIndex = Math.floor(Math.random() * (5 - 0)) + 1;
+          let _randomIndex = _secureRandomInt_(1, 6);
           _passwsordGene += _getSpecial_(_randomIndex);
           break;
         }
