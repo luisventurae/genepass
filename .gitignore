@@ -2,9 +2,6 @@
 node_modules
 package-lock.json
 
-# Test
-test/*.test.js
-
 # IDE's
 
 ### NetBeans ###

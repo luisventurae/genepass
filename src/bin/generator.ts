@@ -50,7 +50,7 @@ const build = (options: options): string => {
  * @param {Function}    _next Callback
  * @returns {String}
  */
-const _validations = (_options: options, _next: any): string => {
+const _validations = (_options: options, _next: () => string): string => {
   if (
     typeof _options.length !== "number" ||
     _options.length < sizes.min ||
@@ -58,6 +58,16 @@ const _validations = (_options: options, _next: any): string => {
   ) {
     throw new RangeError(
       `"length" is not a valid number, it must be between ${sizes.min} and ${sizes.max}`
+    );
+  }
+  const _hasCharType =
+    _options.lowercase ||
+    _options.uppercase ||
+    _options.number ||
+    _options.special;
+  if (_options.length > 0 && !_hasCharType) {
+    throw new RangeError(
+      `at least one of "lowercase", "uppercase", "number" or "special" must be true`
     );
   }
   return _next();
