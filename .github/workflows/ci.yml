@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['14.10.0', '18.x', '22.x']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      # Node 14.10.0 ships npm 6, which doesn't support lockfileVersion 3
+      # (used by this repo's package-lock.json, which requires npm 7+).
+      # Do not "fix" this to npm ci - it will fail on this matrix entry.
+      - name: Install dependencies (npm 6 fallback)
+        if: matrix.node-version == '14.10.0'
+        run: npm install
+      - name: Install dependencies
+        if: matrix.node-version != '14.10.0'
+        run: npm ci
+      - run: npm run build
+      - run: npm test
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - run: npm ci
+      - run: npm audit --audit-level=high
