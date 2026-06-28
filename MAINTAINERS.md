@@ -19,15 +19,19 @@ changed.
 
 ## Project structure
 
-- `src/main.ts` — public entry point, exports `{ build, create, Builder }`.
-- `src/bin/generator.ts` — the generation engine: `build()`, `_validations`
-  (the single source of truth for what a valid `options` object looks like)
+- `src/main.ts` — public entry point, exports
+  `{ build, create, Builder, entropy }`.
+- `src/bin/generator.ts` — the generation engine: `build()`, `entropy()`,
+  `_validate` (the single source of truth for what a valid `options` object
+  looks like, shared by both `build()` and `entropy()`), `_selectedCategories`
+  (which option flags were turned on, shared by `_logic` and `entropy()`)
   and `_logic` (character selection).
 - `src/bin/builder.ts` — fluent/chainable `Builder` class and `create()`
   factory. It does **not** duplicate generation or validation logic — it
-  builds an `options` object and delegates to the same `build()` from
-  `generator.ts`. Any rule change must happen in `generator.ts` only, so the
-  legacy and chained APIs can never drift apart.
+  builds an `options` object (via the private `_toOptions()`) and delegates
+  to the same `build()`/`entropy()` from `generator.ts`. Any rule change
+  must happen in `generator.ts` only, so the legacy and chained APIs can
+  never drift apart.
 - `src/lib/chart.ts` — `_CATEGORY_ALPHABETS_`, the registry mapping each
   option name (`lowercase`/`uppercase`/`number`/`special`) to its full
   character set, plus `_pick_`, the single choke point for drawing a
@@ -95,6 +99,23 @@ changed.
   `log2(N)` bits each individual character already contributes. Randomizing
   the split recovers those bits instead of discarding them by always
   setting every `cᵢ` equal.
+
+- **`entropy()` is a property of the configuration, not of a password.**
+  `genepass.entropy(options)` / `Builder#entropy()` compute
+
+  $$H = L \cdot \log_2(N)$$
+
+  where `L = options.length` and `N` is the size of the union of the
+  selected alphabets (categories are disjoint character sets, so `N` is
+  just the sum of their sizes — no inclusion-exclusion needed there).
+  This assumes a fully uniform draw over the union alphabet, which is the
+  conventional password-strength estimate (the same one zxcvbn/NIST-style
+  meters use) — it is a close upper bound on, not the exact Shannon entropy
+  of, the scheme `_logic` actually runs (which spends a little of that
+  budget on the "at least one of each" guarantee below). `entropy()` calls
+  the same `_validate` that `build()` does and never calls `_logic`, so it's
+  safe to call as a strength check before deciding whether to generate
+  anything.
 
 - **"At least one of each" is inclusion-exclusion, not always free.** For a
   uniform draw of length `L` over the union alphabet (size `N`) to contain

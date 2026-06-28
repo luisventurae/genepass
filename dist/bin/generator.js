@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.build = void 0;
+exports.entropy = exports.build = void 0;
 const chart_1 = require("../lib/chart");
 const permuter_1 = require("../lib/permuter");
 const random_1 = require("../lib/random");
@@ -28,17 +28,42 @@ var sizes;
  * build({length:32, lowercase:true, uppercase:true, number:true, special:true});
  */
 const build = (options) => {
-    const _options = options;
-    return _validations(_options, () => _logic(_options));
+    _validate(options);
+    return _logic(options);
 };
 exports.build = build;
 /**
- * Validate Customizable options
- * @param {Opject}      _options Customizable options
- * @param {Function}    _next Callback
- * @returns {String}
+ * Bits of entropy implied by the given options, assuming every character is
+ * drawn uniformly at random from the union of the selected alphabets:
+ * `H = length * log2(N)`, where `N` is the size of that union. This is a
+ * property of the configuration, not of any one generated password - every
+ * password built from the same options has the same entropy, so this never
+ * needs to actually generate one.
+ * @param {Object}  options Customizable options
+ * @param {Number}  options.length String length
+ * @param {Boolean} [options.lowercase] At least one lowercase
+ * @param {Boolean} [options.uppercase] At least one uppercase
+ * @param {Boolean} [options.number] At least one number
+ * @param {Boolean} [options.special] At least one special character
+ * @returns {Number} Bits of entropy
+ * @example
+ * // returns 28.529...
+ * entropy({length: 6, lowercase: true, uppercase: true});
  */
-const _validations = (_options, _next) => {
+const entropy = (options) => {
+    _validate(options);
+    if (options.length === 0)
+        return 0;
+    const _alphabetSize = _selectedCategories(options).reduce((_total, _category) => _total + chart_1._CATEGORY_ALPHABETS_[_category].length, 0);
+    return options.length * Math.log2(_alphabetSize);
+};
+exports.entropy = entropy;
+/**
+ * Validate Customizable options
+ * @param {Opject} _options Customizable options
+ * @returns {void}
+ */
+const _validate = (_options) => {
     if (typeof _options.length !== "number" ||
         _options.length < sizes.min ||
         _options.length > sizes.max) {
@@ -51,7 +76,23 @@ const _validations = (_options, _next) => {
     if (_options.length > 0 && !_hasCharType) {
         throw new RangeError(`at least one of "lowercase", "uppercase", "number" or "special" must be true`);
     }
-    return _next();
+};
+/**
+ * Which character categories were requested, in a stable order
+ * @param {Opject} _options Customizable options
+ * @returns {Array<String>}
+ */
+const _selectedCategories = (_options) => {
+    const _selected = [];
+    if (_options.lowercase)
+        _selected.push("lowercase");
+    if (_options.uppercase)
+        _selected.push("uppercase");
+    if (_options.number)
+        _selected.push("number");
+    if (_options.special)
+        _selected.push("special");
+    return _selected;
 };
 /**
  * Logic for build password
@@ -63,15 +104,7 @@ const _logic = (_options) => {
     const _lengthPass = _options.length;
     if (_lengthPass === 0)
         return "";
-    const _selected = [];
-    if (_options.lowercase)
-        _selected.push("lowercase");
-    if (_options.uppercase)
-        _selected.push("uppercase");
-    if (_options.number)
-        _selected.push("number");
-    if (_options.special)
-        _selected.push("special");
+    const _selected = _selectedCategories(_options);
     // Inclusion-exclusion guarantee: every selected category gets at least
     // one slot whenever there's room for it. When there's less room than
     // selected categories, "one of each" is unsatisfiable, so fall back to
@@ -101,4 +134,4 @@ const _logic = (_options) => {
     }
     return (0, permuter_1._shuffle_)(_passwsordGene);
 };
-exports.default = { build };
+exports.default = { build, entropy };

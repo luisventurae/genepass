@@ -66,14 +66,29 @@ class Builder {
      * @returns {String} Password generated
      */
     build() {
-        const _options = {
+        return (0, generator_1.build)(this._toOptions());
+    }
+    /**
+     * Bits of entropy implied by the accumulated options, without generating
+     * a password. Every password `.build()` would produce from this same
+     * configuration has this same entropy.
+     * @returns {Number} Bits of entropy
+     */
+    entropy() {
+        return (0, generator_1.entropy)(this._toOptions());
+    }
+    /**
+     * Snapshot the accumulated options into a plain `options` object
+     * @returns {Object}
+     */
+    _toOptions() {
+        return {
             length: this._length,
             lowercase: this._lowercase,
             uppercase: this._uppercase,
             number: this._number,
             special: this._special,
         };
-        return (0, generator_1.build)(_options);
     }
 }
 exports.Builder = Builder;

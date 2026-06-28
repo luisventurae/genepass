@@ -73,6 +73,23 @@ const password = genepass.create(12) // length, required attribute
 
 `genepass.Builder` is also exported directly, so `new genepass.Builder(12)` works the same as `genepass.create(12)`.
 
+### Checking password strength with `.entropy()`
+
+`entropy()` returns how many bits of entropy a configuration implies,
+**without generating a password**. It's a property of the options you pass
+in, not of any specific password — every password built from the same
+options has the same entropy.
+
+```js
+const genepass = require("genepass");
+
+const bits = genepass.entropy({ length: 12, lowercase: true, number: true });
+// or
+const bits2 = genepass.create(12).lowercase().number().entropy();
+
+console.log(bits); // 62.039100017307746
+```
+
 # Supported attributes
 
 | Attribute | Data Type | Description                                                                                           | Required | Default |
