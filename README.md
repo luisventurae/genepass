@@ -155,6 +155,30 @@ const password = genepass.create(32)
  * /
 ```
 
+# Common mistakes (throws `RangeError`)
+
+```js
+const genepass = require("genepass");
+
+// ❌ Missing "length"
+genepass.build({ lowercase: true });
+// or
+genepass.create().lowercase().build();
+
+// ❌ "length" out of range (must be between 0 and 2048)
+genepass.build({ length: 2049, lowercase: true });
+genepass.build({ length: -1, lowercase: true });
+
+// ❌ "length" is not a number
+genepass.build({ length: "12", lowercase: true });
+
+// ❌ No character-type option selected (need at least one of
+// "lowercase", "uppercase", "number" or "special")
+genepass.build({ length: 10 });
+// or
+genepass.create(10).build();
+```
+
 # Contributing
 
 Want to contribute or understand how the project is built internally? See [MAINTAINERS.md](./MAINTAINERS.md).
