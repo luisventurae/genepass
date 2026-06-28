@@ -47,7 +47,7 @@ changed.
   why `engines.node` requires `>=14.10.0` — the version `crypto.randomInt`
   was introduced in.
 - **One shared engine, two APIs.** `genepass.build({...})` (legacy,
-  options-object) and `genepass.create()...build()` (fluent/chainable) both
+  options-object) and `genepass.create(length)...build()` (fluent/chainable) both
   call the exact same `build()` function in `generator.ts`, so they always
   produce the same validation errors and the same character-selection
   behavior. Never reimplement validation or generation logic in
@@ -67,15 +67,18 @@ it's re-exported from `src/main.ts` so its types are reachable from
 ## What gets published to npm
 
 `package.json` has a `"files"` whitelist:
+
 ```json
 "files": ["dist", "README.md", "LICENSE"]
 ```
+
 Only those paths are included in the npm tarball — **not** `src/`, `test/`,
 `tsconfig.json`, or this file. Note that npm publishing is controlled by
 this whitelist, not by what's tracked in the `master` git branch — files
 can exist in the repo (visible on GitHub) without ever being published.
 
 Before cutting a release, sanity-check the tarball contents with:
+
 ```bash
 npm pack --dry-run
 ```
@@ -84,6 +87,7 @@ npm pack --dry-run
 
 `test/index.test.js` uses Node's built-in `assert` (no test framework
 dependency) and is organized into two sections:
+
 - **Happy path** — valid inputs produce correctly-shaped passwords.
 - **Fail path** — invalid inputs throw `RangeError` with the expected
   message.

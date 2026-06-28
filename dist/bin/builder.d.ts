@@ -3,8 +3,7 @@
  * Delegates to the same `build()` engine (and the same validation rules)
  * used by the legacy options-object API, so both stay in sync.
  * @example
- * const password = create()
- *   .length(12)
+ * const password = create(12)
  *   .lowercase()
  *   .uppercase()
  *   .number()
@@ -18,11 +17,9 @@ declare class Builder {
     private _number;
     private _special;
     /**
-     * Set the password length
-     * @param {Number} value String length
-     * @returns {Builder}
+     * @param {Number} length String length, required
      */
-    length(value: number): Builder;
+    constructor(length: number);
     /**
      * Require at least one lowercase character
      * @param {Boolean} [value=true]
@@ -55,8 +52,9 @@ declare class Builder {
 }
 /**
  * Create a new chainable password builder
+ * @param {Number} length String length, required
  * @returns {Builder}
  */
-declare const create: () => Builder;
+declare const create: (length: number) => Builder;
 export { Builder, create };
 //# sourceMappingURL=builder.d.ts.map

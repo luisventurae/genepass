@@ -5,8 +5,7 @@ import { build, options } from "./generator";
  * Delegates to the same `build()` engine (and the same validation rules)
  * used by the legacy options-object API, so both stay in sync.
  * @example
- * const password = create()
- *   .length(12)
+ * const password = create(12)
  *   .lowercase()
  *   .uppercase()
  *   .number()
@@ -14,20 +13,17 @@ import { build, options } from "./generator";
  *   .build();
  */
 class Builder {
-  private _length: number | undefined;
+  private _length: number;
   private _lowercase: boolean = false;
   private _uppercase: boolean = false;
   private _number: boolean = false;
   private _special: boolean = false;
 
   /**
-   * Set the password length
-   * @param {Number} value String length
-   * @returns {Builder}
+   * @param {Number} length String length, required
    */
-  length(value: number): Builder {
-    this._length = value;
-    return this;
+  constructor(length: number) {
+    this._length = length;
   }
 
   /**
@@ -75,14 +71,8 @@ class Builder {
    * @returns {String} Password generated
    */
   build(): string {
-    const _length = this._length;
-    if (_length === undefined) {
-      throw new RangeError(
-        `"length" is required, call .length(n) before .build()`
-      );
-    }
     const _options: options = {
-      length: _length,
+      length: this._length,
       lowercase: this._lowercase,
       uppercase: this._uppercase,
       number: this._number,
@@ -94,8 +84,9 @@ class Builder {
 
 /**
  * Create a new chainable password builder
+ * @param {Number} length String length, required
  * @returns {Builder}
  */
-const create = (): Builder => new Builder();
+const create = (length: number): Builder => new Builder(length);
 
 export { Builder, create };

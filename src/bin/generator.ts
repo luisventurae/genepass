@@ -57,7 +57,7 @@ const _validations = (_options: options, _next: () => string): string => {
     _options.length > sizes.max
   ) {
     throw new RangeError(
-      `"length" is not a valid number, it must be between ${sizes.min} and ${sizes.max}`
+      `"length" is not a valid number, it must be between ${sizes.min} and ${sizes.max}`,
     );
   }
   const _hasCharType =
@@ -67,7 +67,7 @@ const _validations = (_options: options, _next: () => string): string => {
     _options.special;
   if (_options.length > 0 && !_hasCharType) {
     throw new RangeError(
-      `at least one of "lowercase", "uppercase", "number" or "special" must be true`
+      `at least one of "lowercase", "uppercase", "number" or "special" must be true`,
     );
   }
   return _next();
@@ -81,7 +81,7 @@ const _validations = (_options: options, _next: () => string): string => {
 const _logic = (_options: options | any): string => {
   let _passwsordGene: string = "";
   const _keysOptionsNL = Object.keys(_options).filter(
-    (_key: string, _index: number) => _options[`${_key}`] && _key !== "length"
+    (_key: string, _index: number) => _options[`${_key}`] && _key !== "length",
   ); // keys option, no length
   const _lengthKeys = _keysOptionsNL.length;
   const _lengthPass = _options.length;
