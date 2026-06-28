@@ -42,7 +42,7 @@ const password = genepass.build({
 
 /**
  * Return example
- * password = "!UghH1!#e21T"
+ * password = "R@2lUO%i16x@"
  * /
 ```
 
@@ -62,7 +62,7 @@ const password = genepass.create(12) // length, required attribute
 
 /**
  * Return example
- * password = "!UghH1!#e21T"
+ * password = "R@2lUO%i16x@"
  * /
 ```
 
@@ -95,10 +95,15 @@ const password = genepass.build({
     lowercase: true,
     uppercase: true,
 });
+// or
+const password = genepass.create(8)
+    .lowercase()
+    .uppercase()
+    .build();
 
 /**
  * Return example
- * password = "ReyDFHbp"
+ * password = "BzWuHBnb"
  * /
 ```
 
@@ -111,10 +116,14 @@ const password = genepass.build({
     length: 6,
     number: true,
 });
+// or
+const password = genepass.create(6)
+    .number()
+    .build();
 
 /**
  * Return example
- * password = "218152"
+ * password = "875221"
  * /
 ```
 
@@ -130,10 +139,17 @@ const password = genepass.build({
     number: true,
     special: true,
 });
+// or
+const password = genepass.create(32)
+    .lowercase()
+    .uppercase()
+    .number()
+    .special()
+    .build();
 
 /**
  * Return example
- * password = "t13Yq#Kb1D%%pF%SM@121%4#k!jjTq1Q"
+ * password = "h?bj1r1H1IIrm41nL?#@2T%?M@1LPg!1"
  * /
 ```
 
