@@ -1,9 +1,17 @@
 {
   "name": "genepass",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Password generator",
   "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
     "test": "node test/index.test.js"
   },
   "keywords": [
@@ -18,7 +26,11 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=14.10.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "@types/node": "^14.18.63"
   },
   "repository": {
     "type": "git",

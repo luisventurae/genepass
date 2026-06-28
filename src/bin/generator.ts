@@ -6,8 +6,9 @@ import {
   _getSpecial_,
 } from "../lib/chart";
 import { _shuffle_ } from "../lib/permuter";
+import { _secureRandomInt_ } from "../lib/random";
 
-interface options {
+export interface options {
   length: number;
   lowercase?: boolean;
   uppercase?: boolean;
@@ -49,14 +50,24 @@ const build = (options: options): string => {
  * @param {Function}    _next Callback
  * @returns {String}
  */
-const _validations = (_options: options, _next: any): string => {
+const _validations = (_options: options, _next: () => string): string => {
   if (
     typeof _options.length !== "number" ||
     _options.length < sizes.min ||
     _options.length > sizes.max
   ) {
     throw new RangeError(
-      `"length" is not a valid number, it must be between ${sizes.min} and ${sizes.max}`
+      `"length" is not a valid number, it must be between ${sizes.min} and ${sizes.max}`,
+    );
+  }
+  const _hasCharType =
+    _options.lowercase ||
+    _options.uppercase ||
+    _options.number ||
+    _options.special;
+  if (_options.length > 0 && !_hasCharType) {
+    throw new RangeError(
+      `at least one of "lowercase", "uppercase", "number" or "special" must be true`,
     );
   }
   return _next();
@@ -70,7 +81,7 @@ const _validations = (_options: options, _next: any): string => {
 const _logic = (_options: options | any): string => {
   let _passwsordGene: string = "";
   const _keysOptionsNL = Object.keys(_options).filter(
-    (_key: string, _index: number) => _options[`${_key}`] && _key !== "length"
+    (_key: string, _index: number) => _options[`${_key}`] && _key !== "length",
   ); // keys option, no length
   const _lengthKeys = _keysOptionsNL.length;
   const _lengthPass = _options.length;
@@ -93,8 +104,7 @@ const _logic = (_options: options | any): string => {
     // Adding residue anywhere
     if (_res) {
       for (let _i = 0; _i < _res; _i++) {
-        let _index = Math.floor(Math.random() * (_lengthKeys - 1)) + 1;
-        _index -= 1;
+        let _index = _secureRandomInt_(0, _lengthKeys - 1);
         _quantitiesChart[_index]._qtt += 1;
       }
     }
@@ -104,23 +114,23 @@ const _logic = (_options: options | any): string => {
     for (let _i = 0; _i < _qC._qtt; _i++) {
       switch (_qC._opt) {
         case "lowercase": {
-          let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+          let _randomIndex = _secureRandomInt_(1, 26);
           _passwsordGene += _getWordLowerc_(_randomIndex);
           break;
         }
         case "uppercase": {
-          let _randomIndex = Math.floor(Math.random() * (25 - 0)) + 1;
+          let _randomIndex = _secureRandomInt_(1, 26);
           _passwsordGene += _getWordUpperc_(_randomIndex);
           break;
         }
         case "number": {
-          let _randomIndex = Math.floor(Math.random() * (100 - 0)) + 1;
+          let _randomIndex = _secureRandomInt_(1, 101);
           _randomIndex = Math.round(_randomIndex / 10);
           _passwsordGene += _getNumber_(_randomIndex);
           break;
         }
         case "special": {
-          let _randomIndex = Math.floor(Math.random() * (5 - 0)) + 1;
+          let _randomIndex = _secureRandomInt_(1, 6);
           _passwsordGene += _getSpecial_(_randomIndex);
           break;
         }
@@ -131,4 +141,5 @@ const _logic = (_options: options | any): string => {
   return _passwsordGene;
 };
 
+export { build };
 export default { build };

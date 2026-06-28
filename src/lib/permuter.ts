@@ -1,3 +1,5 @@
+import { _secureRandomInt_ } from "./random";
+
 /**
  * Text to permute charts
  * @param {String} word Word
@@ -12,7 +14,7 @@ const _shuffle_ = (word: string): string => {
   // While there remain elements to shuffle...
   while (0 !== _currentIndex) {
     // Pick a remaining element...
-    _randomIndex = Math.floor(Math.random() * _currentIndex);
+    _randomIndex = _secureRandomInt_(0, _currentIndex);
     _currentIndex -= 1;
 
     // And swap it with the current element.
