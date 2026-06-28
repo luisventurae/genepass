@@ -6,7 +6,9 @@ Generate a random customizable passwords
 
 # Security
 
-Since v2.1.0, password generation is cryptographically secure. Requires Node.js `>=14.10.0`.
+**Since v2.1.0, password generation is cryptographically secure. Requires Node.js `>=14.10.0`.**
+
+Every character is drawn uniformly from its full alphabet (no character is more or less likely than any other), and when more than one category is requested, how many characters come from each category is randomized too — not split evenly — so the category layout itself doesn't leak information.
 
 # Installation
 
@@ -42,7 +44,7 @@ const password = genepass.build({
 
 /**
  * Return example
- * password = "!UghH1!#e21T"
+ * password = "R@2lUO%i16x@"
  * /
 ```
 
@@ -62,11 +64,11 @@ const password = genepass.create(12) // length, required attribute
 
 /**
  * Return example
- * password = "!UghH1!#e21T"
+ * password = "R@2lUO%i16x@"
  * /
 ```
 
-`genepass.Builder` is also exported directly, so `new genepass.Builder()` works the same as `genepass.create()`.
+`genepass.Builder` is also exported directly, so `new genepass.Builder(12)` works the same as `genepass.create(12)`.
 
 # Supported attributes
 
@@ -95,10 +97,15 @@ const password = genepass.build({
     lowercase: true,
     uppercase: true,
 });
+// or
+const password = genepass.create(8)
+    .lowercase()
+    .uppercase()
+    .build();
 
 /**
  * Return example
- * password = "ReyDFHbp"
+ * password = "BzWuHBnb"
  * /
 ```
 
@@ -111,10 +118,14 @@ const password = genepass.build({
     length: 6,
     number: true,
 });
+// or
+const password = genepass.create(6)
+    .number()
+    .build();
 
 /**
  * Return example
- * password = "218152"
+ * password = "875221"
  * /
 ```
 
@@ -130,11 +141,42 @@ const password = genepass.build({
     number: true,
     special: true,
 });
+// or
+const password = genepass.create(32)
+    .lowercase()
+    .uppercase()
+    .number()
+    .special()
+    .build();
 
 /**
  * Return example
- * password = "t13Yq#Kb1D%%pF%SM@121%4#k!jjTq1Q"
+ * password = "h?bj1r1H1IIrm41nL?#@2T%?M@1LPg!1"
  * /
+```
+
+# Common mistakes (throws `RangeError`)
+
+```js
+const genepass = require("genepass");
+
+// ❌ Missing "length"
+genepass.build({ lowercase: true });
+// or
+genepass.create().lowercase().build();
+
+// ❌ "length" out of range (must be between 0 and 2048)
+genepass.build({ length: 2049, lowercase: true });
+genepass.build({ length: -1, lowercase: true });
+
+// ❌ "length" is not a number
+genepass.build({ length: "12", lowercase: true });
+
+// ❌ No character-type option selected (need at least one of
+// "lowercase", "uppercase", "number" or "special")
+genepass.build({ length: 10 });
+// or
+genepass.create(10).build();
 ```
 
 # Contributing

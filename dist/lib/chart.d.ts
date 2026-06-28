@@ -1,38 +1,35 @@
-type language = "symbol" | "es" | "en";
 /**
- * Get a word lowercase
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet] Language alphabet
+ * Lowercase English alphabet
+ */
+declare const _LOWERCASE_: string[];
+/**
+ * Uppercase English alphabet
+ */
+declare const _UPPERCASE_: string[];
+/**
+ * Digits 0-9
+ */
+declare const _NUMBERS_: string[];
+/**
+ * Special characters
+ */
+declare const _SPECIAL_: string[];
+/**
+ * Character categories selectable from the public options/builder API,
+ * keyed by their option name. Adding a new chainable character-type
+ * method (e.g. a future `.hex()`) only requires one new entry here -
+ * the distribution logic in `generator.ts` never has to change.
+ */
+declare const _CATEGORY_ALPHABETS_: Record<string, string[]>;
+/**
+ * Pick a uniformly random character from an alphabet. Every character has
+ * exactly probability 1/N: `crypto.randomInt` rejection-samples internally
+ * instead of using a biased modulo reduction, and indexing the full
+ * alphabet (rather than a hand-picked sub-range) means every character,
+ * including the first and last, is reachable.
+ * @param {Array<String>} _alphabet
  * @returns {String}
  */
-declare const _getWordLowerc_: (_index: number, _alphabet?: language) => string;
-/**
- * Get a word uppercase
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet] Language alphabet
- * @returns {String}
- */
-declare const _getWordUpperc_: (_index: number, _alphabet?: language) => string;
-/**
- * Get a word random case, maybe lowercase or uppercase
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet] Language alphabet
- * @returns {String}
- */
-declare const _getWordRandomc_: (_index: number, _alphabet: language) => string;
-/**
- * Get a random integer number
- * @param {Number}  [_min=0] Minimum number
- * @param {Number}  [_max=9] Maximum number
- * @returns {Number}
- */
-declare const _getNumber_: (_min?: number, _max?: number) => number;
-/**
- * Get a random integer number
- * @param {Number}  [_min=0] Minimum number
- * @param {Number}  [_max=6] Maximum number
- * @returns {Number}
- */
-declare const _getSpecial_: (_index: number) => string;
-export { _getWordLowerc_, _getWordUpperc_, _getWordRandomc_, _getNumber_, _getSpecial_, };
+declare const _pick_: (_alphabet: string[]) => string;
+export { _LOWERCASE_, _UPPERCASE_, _NUMBERS_, _SPECIAL_, _CATEGORY_ALPHABETS_, _pick_, };
 //# sourceMappingURL=chart.d.ts.map

@@ -28,9 +28,14 @@ changed.
   builds an `options` object and delegates to the same `build()` from
   `generator.ts`. Any rule change must happen in `generator.ts` only, so the
   legacy and chained APIs can never drift apart.
-- `src/lib/chart.ts` — character set lookups (lowercase/uppercase/number/
-  special).
-- `src/lib/permuter.ts` — Fisher-Yates shuffle of the final password.
+- `src/lib/chart.ts` — `_CATEGORY_ALPHABETS_`, the registry mapping each
+  option name (`lowercase`/`uppercase`/`number`/`special`) to its full
+  character set, plus `_pick_`, the single choke point for drawing a
+  uniformly random character from an alphabet. Adding a new character-type
+  method in the future (e.g. a `hex` category) means adding one entry here
+  — `generator.ts`'s distribution logic does not change.
+- `src/lib/permuter.ts` — generic Fisher-Yates shuffle (`_shuffleArray_`)
+  plus the `_shuffle_` string wrapper used on the final password.
 - `src/lib/random.ts` — `_secureRandomInt_`, the single choke point for all
   randomness in the package.
 - `dist/` — compiled output, **generated, never edited by hand**.
@@ -54,6 +59,62 @@ changed.
   `builder.ts`.
 - **No `any`, no type casts.** The codebase is fully typed; narrow types via
   local `const` bindings instead of non-null assertions or casts.
+- **Unbiased character selection.** `_pick_(alphabet)` in `chart.ts` always
+  indexes the _entire_ alphabet with `_secureRandomInt_(0, alphabet.length)`.
+  Never call `_secureRandomInt_` with a hand-picked sub-range (e.g. `1..26`)
+  as a substitute for `0..length` — that was the v2.1.0 bug: it made the
+  first character of every alphabet (`'a'`, `'$'`, digit `'0'`, ...)
+  unreachable. `crypto.randomInt` already rejection-samples internally — it
+  draws raw values from a range `R` and discards (rejects) any value that
+  would make some characters more likely than others, retrying until one
+  lands inside the largest multiple of `N` that fits in `R`:
+
+  $$\text{accept } v \iff v < N\left\lfloor \frac{R}{N}\right\rfloor$$
+
+  so every accepted draw satisfies `P(pick x) = 1/N` for all `x` in the
+  alphabet — feeding it the full, correct range is all that's needed for a
+  uniform distribution. This is also why the Fisher-Yates shuffle in
+  `permuter.ts` draws its swap index from `_secureRandomInt_(0, currentIndex)`
+  (inclusive lower bound, exclusive upper bound matching the unshuffled
+  prefix) — it's the same uniformity requirement, applied so that every
+  permutation of the password's characters is equally likely:
+
+  $$P(\text{any specific permutation}) = \frac{1}{L!}$$
+
+- **Randomized category counts, not equal split.** When multiple categories
+  are selected, `_logic` in `generator.ts` gives each one guaranteed slot,
+  then hands out the remaining slots one at a time to a uniformly random
+  category — a multinomial draw conditioned on every category having count
+  ≥ 1. Forcing equal counts (e.g. always 3-3-3-3 for `length: 12` with 4
+  categories) throws away a large share of the available entropy:
+
+  $$H = \log_2 \binom{L-1}{k-1} + \log_2 \frac{L!}{c_1!\,c_2!\cdots c_k!} \;\text{bits of extra uncertainty from the split alone}$$
+
+  (`L` = password length, `k` = number of selected categories, `cᵢ` = how
+  many characters category `i` contributed) — on top of the
+  `log2(N)` bits each individual character already contributes. Randomizing
+  the split recovers those bits instead of discarding them by always
+  setting every `cᵢ` equal.
+
+- **"At least one of each" is inclusion-exclusion, not always free.** For a
+  uniform draw of length `L` over the union alphabet (size `N`) to contain
+  every one of the `k` required categories (sizes `s₁ … s_k`) is not
+  guaranteed — its probability is given by inclusion-exclusion over "which
+  categories are missing":
+
+  $$P(\text{all } k \text{ present}) = \sum_{j=0}^{k} (-1)^j \binom{k}{j} \left(\frac{N - s_j}{N}\right)^{L}$$
+
+  For `N=68` (all four categories), `L=12`, the chance of _missing_ just the
+  6-character special set is `(62/68)¹² ≈ 33%` — too high to leave to
+  chance. That's why `_logic` reserves one guaranteed slot per selected
+  category up front (`_categories.map((_c) => [_c, 1])`) instead of relying
+  on a fully uniform draw over the union alphabet: it's a hard guarantee
+  that costs only a little of the entropy computed above, rather than a
+  one-in-three chance of an incomplete password. The guarantee only holds
+  when `length >= number of categories`; below that it's unsatisfiable by
+  the pigeonhole principle, so `_logic` falls back to a uniformly random
+  subset of the selected categories instead of always favoring the
+  first-declared ones.
 
 ## Shipping TypeScript types
 

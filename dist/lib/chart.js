@@ -1,161 +1,48 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._getSpecial_ = exports._getNumber_ = exports._getWordRandomc_ = exports._getWordUpperc_ = exports._getWordLowerc_ = void 0;
+exports._pick_ = exports._CATEGORY_ALPHABETS_ = exports._SPECIAL_ = exports._NUMBERS_ = exports._UPPERCASE_ = exports._LOWERCASE_ = void 0;
 const random_1 = require("./random");
-// enum languages {
-//   "en" = "_abc_en",
-//   "es" = "_abc_es",
-// }
 /**
- * English Alphabet
- * @type {Array<String>}
+ * Lowercase English alphabet
  */
-const _abc_en = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-];
+const _LOWERCASE_ = "abcdefghijklmnopqrstuvwxyz".split("");
+exports._LOWERCASE_ = _LOWERCASE_;
 /**
- * Spanish Alphabet
- * @type {Array<String>}
+ * Uppercase English alphabet
  */
-const _abc_es = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-];
-const _symbols = ["$", "%", "@", "!", "?", "#"];
+const _UPPERCASE_ = _LOWERCASE_.map((_char) => _char.toUpperCase());
+exports._UPPERCASE_ = _UPPERCASE_;
 /**
- * Get a word
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet='es'] Language alphabet
+ * Digits 0-9
+ */
+const _NUMBERS_ = "0123456789".split("");
+exports._NUMBERS_ = _NUMBERS_;
+/**
+ * Special characters
+ */
+const _SPECIAL_ = ["$", "%", "@", "!", "?", "#"];
+exports._SPECIAL_ = _SPECIAL_;
+/**
+ * Character categories selectable from the public options/builder API,
+ * keyed by their option name. Adding a new chainable character-type
+ * method (e.g. a future `.hex()`) only requires one new entry here -
+ * the distribution logic in `generator.ts` never has to change.
+ */
+const _CATEGORY_ALPHABETS_ = {
+    lowercase: _LOWERCASE_,
+    uppercase: _UPPERCASE_,
+    number: _NUMBERS_,
+    special: _SPECIAL_,
+};
+exports._CATEGORY_ALPHABETS_ = _CATEGORY_ALPHABETS_;
+/**
+ * Pick a uniformly random character from an alphabet. Every character has
+ * exactly probability 1/N: `crypto.randomInt` rejection-samples internally
+ * instead of using a biased modulo reduction, and indexing the full
+ * alphabet (rather than a hand-picked sub-range) means every character,
+ * including the first and last, is reachable.
+ * @param {Array<String>} _alphabet
  * @returns {String}
  */
-const _getWord = (_index, _alphabet = "en") => {
-    // Validation
-    let _maxAlphabets;
-    let alphabetUsed;
-    switch (_alphabet) {
-        case "symbol":
-            alphabetUsed = _symbols;
-            break;
-        case "en":
-            alphabetUsed = _abc_en;
-            break;
-        case "es":
-            alphabetUsed = _abc_es;
-            break;
-        default:
-            throw new Error("_alphabet is not available");
-    }
-    _maxAlphabets = alphabetUsed.length;
-    // return '_test';
-    if (_index < 0 || _index >= _maxAlphabets)
-        throw new Error(`${_index} is not a valid value for _index in ${_alphabet}`);
-    // Logic
-    return alphabetUsed[_index];
-};
-/**
- * Get a word lowercase
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet] Language alphabet
- * @returns {String}
- */
-const _getWordLowerc_ = (_index, _alphabet) => _getWord(_index, _alphabet).toLowerCase();
-exports._getWordLowerc_ = _getWordLowerc_;
-/**
- * Get a word uppercase
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet] Language alphabet
- * @returns {String}
- */
-const _getWordUpperc_ = (_index, _alphabet) => _getWord(_index, _alphabet).toUpperCase();
-exports._getWordUpperc_ = _getWordUpperc_;
-/**
- * Get a word random case, maybe lowercase or uppercase
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet] Language alphabet
- * @returns {String}
- */
-const _getWordRandomc_ = (_index, _alphabet) => {
-    const _random = (0, random_1._secureRandomInt_)(0, 2);
-    return _random % 2 === 0
-        ? _getWord(_index, _alphabet).toUpperCase()
-        : _getWord(_index, _alphabet).toLowerCase();
-};
-exports._getWordRandomc_ = _getWordRandomc_;
-/**
- * Get a random integer number
- * @param {Number}  [_min=0] Minimum number
- * @param {Number}  [_max=9] Maximum number
- * @returns {Number}
- */
-const _getNumber_ = (_min = 0, _max = 9) => {
-    const _range = Math.max(_max - _min, 1);
-    return (0, random_1._secureRandomInt_)(1, _range + 1);
-};
-exports._getNumber_ = _getNumber_;
-/**
- * Get a random integer number
- * @param {Number}  [_min=0] Minimum number
- * @param {Number}  [_max=6] Maximum number
- * @returns {Number}
- */
-const _getSpecial_ = (_index) => {
-    if (_index > _symbols.length - 1) {
-        throw new RangeError(`max index allowed is ${_symbols.length - 1}, got ${_index}`);
-    }
-    return _getWord(_index, "symbol");
-};
-exports._getSpecial_ = _getSpecial_;
+const _pick_ = (_alphabet) => _alphabet[(0, random_1._secureRandomInt_)(0, _alphabet.length)];
+exports._pick_ = _pick_;

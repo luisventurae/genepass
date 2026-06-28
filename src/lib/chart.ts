@@ -1,177 +1,55 @@
 import { _secureRandomInt_ } from "./random";
 
-type language = "symbol" | "es" | "en";
-// enum languages {
-//   "en" = "_abc_en",
-//   "es" = "_abc_es",
-// }
 /**
- * English Alphabet
- * @type {Array<String>}
+ * Lowercase English alphabet
  */
-const _abc_en: string[] = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z",
-];
+const _LOWERCASE_: string[] = "abcdefghijklmnopqrstuvwxyz".split("");
 
 /**
- * Spanish Alphabet
- * @type {Array<String>}
+ * Uppercase English alphabet
  */
-const _abc_es: string[] = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z",
-];
-
-const _symbols: string[] = ["$", "%", "@", "!", "?", "#"];
+const _UPPERCASE_: string[] = _LOWERCASE_.map((_char) => _char.toUpperCase());
 
 /**
- * Get a word
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet='es'] Language alphabet
- * @returns {String}
+ * Digits 0-9
  */
-const _getWord = (_index: number, _alphabet: language = "en"): string => {
-  // Validation
-  let _maxAlphabets: number;
-  let alphabetUsed: Array<string>;
-  switch (_alphabet) {
-    case "symbol":
-      alphabetUsed = _symbols;
-      break;
-    case "en":
-      alphabetUsed = _abc_en;
-      break;
-    case "es":
-      alphabetUsed = _abc_es;
-      break;
-    default:
-      throw new Error("_alphabet is not available");
-  }
-  _maxAlphabets = alphabetUsed.length;
-  // return '_test';
-  if (_index < 0 || _index >= _maxAlphabets)
-    throw new Error(
-      `${_index} is not a valid value for _index in ${_alphabet}`
-    );
-  // Logic
-  return alphabetUsed[_index];
+const _NUMBERS_: string[] = "0123456789".split("");
+
+/**
+ * Special characters
+ */
+const _SPECIAL_: string[] = ["$", "%", "@", "!", "?", "#"];
+
+/**
+ * Character categories selectable from the public options/builder API,
+ * keyed by their option name. Adding a new chainable character-type
+ * method (e.g. a future `.hex()`) only requires one new entry here -
+ * the distribution logic in `generator.ts` never has to change.
+ */
+const _CATEGORY_ALPHABETS_: Record<string, string[]> = {
+  lowercase: _LOWERCASE_,
+  uppercase: _UPPERCASE_,
+  number: _NUMBERS_,
+  special: _SPECIAL_,
 };
 
 /**
- * Get a word lowercase
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet] Language alphabet
+ * Pick a uniformly random character from an alphabet. Every character has
+ * exactly probability 1/N: `crypto.randomInt` rejection-samples internally
+ * instead of using a biased modulo reduction, and indexing the full
+ * alphabet (rather than a hand-picked sub-range) means every character,
+ * including the first and last, is reachable.
+ * @param {Array<String>} _alphabet
  * @returns {String}
  */
-const _getWordLowerc_ = (_index: number, _alphabet?: language): string =>
-  _getWord(_index, _alphabet).toLowerCase();
-
-/**
- * Get a word uppercase
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet] Language alphabet
- * @returns {String}
- */
-const _getWordUpperc_ = (_index: number, _alphabet?: language): string =>
-  _getWord(_index, _alphabet).toUpperCase();
-
-/**
- * Get a word random case, maybe lowercase or uppercase
- * @param {Number} _index Index for a word in asc alphabetic
- * @param {String} [_alphabet] Language alphabet
- * @returns {String}
- */
-const _getWordRandomc_ = (_index: number, _alphabet: language): string => {
-  const _random: number = _secureRandomInt_(0, 2);
-  return _random % 2 === 0
-    ? _getWord(_index, _alphabet).toUpperCase()
-    : _getWord(_index, _alphabet).toLowerCase();
-};
-
-/**
- * Get a random integer number
- * @param {Number}  [_min=0] Minimum number
- * @param {Number}  [_max=9] Maximum number
- * @returns {Number}
- */
-const _getNumber_ = (_min: number = 0, _max: number = 9): number => {
-  const _range: number = Math.max(_max - _min, 1);
-  return _secureRandomInt_(1, _range + 1);
-};
-
-/**
- * Get a random integer number
- * @param {Number}  [_min=0] Minimum number
- * @param {Number}  [_max=6] Maximum number
- * @returns {Number}
- */
-const _getSpecial_ = (_index: number): string => {
-  if (_index > _symbols.length - 1) {
-    throw new RangeError(
-      `max index allowed is ${_symbols.length - 1}, got ${_index}`
-    );
-  }
-  return _getWord(_index, "symbol");
-};
+const _pick_ = (_alphabet: string[]): string =>
+  _alphabet[_secureRandomInt_(0, _alphabet.length)];
 
 export {
-  _getWordLowerc_,
-  _getWordUpperc_,
-  _getWordRandomc_,
-  _getNumber_,
-  _getSpecial_,
+  _LOWERCASE_,
+  _UPPERCASE_,
+  _NUMBERS_,
+  _SPECIAL_,
+  _CATEGORY_ALPHABETS_,
+  _pick_,
 };
