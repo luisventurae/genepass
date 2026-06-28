@@ -1,28 +1,33 @@
 import { _secureRandomInt_ } from "./random";
 
 /**
- * Text to permute charts
- * @param {String} word Word
- * @returns {String}
+ * Fisher-Yates (Durstenfeld) shuffle. Every permutation of `_items` is
+ * equally likely (probability 1/n!), since each swap draws its index
+ * uniformly from the still-unshuffled prefix `[0, _currentIndex]`.
+ * @param {Array<T>} _items
+ * @returns {Array<T>} A shuffled copy; `_items` is left untouched
  */
-const _shuffle_ = (word: string): string => {
-  const _charts = word.split("");
-  let _currentIndex = _charts.length,
-    _temporaryValue,
-    _randomIndex;
+const _shuffleArray_ = <T>(_items: T[]): T[] => {
+  const _result = _items.slice();
+  let _currentIndex = _result.length;
 
-  // While there remain elements to shuffle...
-  while (0 !== _currentIndex) {
-    // Pick a remaining element...
-    _randomIndex = _secureRandomInt_(0, _currentIndex);
+  while (_currentIndex !== 0) {
+    const _randomIndex = _secureRandomInt_(0, _currentIndex);
     _currentIndex -= 1;
 
-    // And swap it with the current element.
-    _temporaryValue = _charts[_currentIndex];
-    _charts[_currentIndex] = _charts[_randomIndex];
-    _charts[_randomIndex] = _temporaryValue;
+    const _temporaryValue = _result[_currentIndex];
+    _result[_currentIndex] = _result[_randomIndex];
+    _result[_randomIndex] = _temporaryValue;
   }
-  return _charts.join("");
+  return _result;
 };
 
-export { _shuffle_ };
+/**
+ * Shuffle the characters of a string
+ * @param {String} _word Word
+ * @returns {String}
+ */
+const _shuffle_ = (_word: string): string =>
+  _shuffleArray_(_word.split("")).join("");
+
+export { _shuffle_, _shuffleArray_ };

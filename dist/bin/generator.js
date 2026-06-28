@@ -59,61 +59,46 @@ const _validations = (_options, _next) => {
  * @returns {String}
  */
 const _logic = (_options) => {
-    let _passwsordGene = "";
-    const _keysOptionsNL = Object.keys(_options).filter((_key, _index) => _options[`${_key}`] && _key !== "length"); // keys option, no length
-    const _lengthKeys = _keysOptionsNL.length;
+    var _a;
     const _lengthPass = _options.length;
-    // Build to know how many times per chart
-    let _quantitiesChart = []; // { _opt -> Option Name, _qtt -> Quantity }
-    _quantitiesChart = _keysOptionsNL
-        .map((_key) => ({ _opt: _key, _qtt: 1 }))
-        .splice(0, _lengthPass);
-    if (_lengthKeys < _lengthPass) {
-        _quantitiesChart = _keysOptionsNL
-            .map((_key) => ({ _opt: _key, _qtt: 1 }))
-            .splice(0, _lengthPass);
-        const _add = Math.floor(_lengthPass / _lengthKeys); // To know how many has to have every _qtt
-        const _res = _lengthPass % _lengthKeys; // To know how many has to add for residue
-        // Adding equals charts
-        for (let _qC of _quantitiesChart) {
-            _qC._qtt += _add - 1;
-        }
-        // Adding residue anywhere
-        if (_res) {
-            for (let _i = 0; _i < _res; _i++) {
-                let _index = (0, random_1._secureRandomInt_)(0, _lengthKeys - 1);
-                _quantitiesChart[_index]._qtt += 1;
-            }
+    if (_lengthPass === 0)
+        return "";
+    const _selected = [];
+    if (_options.lowercase)
+        _selected.push("lowercase");
+    if (_options.uppercase)
+        _selected.push("uppercase");
+    if (_options.number)
+        _selected.push("number");
+    if (_options.special)
+        _selected.push("special");
+    // Inclusion-exclusion guarantee: every selected category gets at least
+    // one slot whenever there's room for it. When there's less room than
+    // selected categories, "one of each" is unsatisfiable, so fall back to
+    // a uniformly random subset of them instead of always favoring the
+    // first-declared options.
+    const _categories = _lengthPass >= _selected.length
+        ? _selected
+        : (0, permuter_1._shuffleArray_)(_selected).slice(0, _lengthPass);
+    // One guaranteed slot per category, then the remaining slots are handed
+    // out one at a time to a uniformly random category - a multinomial draw
+    // conditioned on every category having count >= 1. This keeps each
+    // password's category layout unpredictable instead of forcing equal
+    // counts, which otherwise throws away a large share of the entropy
+    // length/category selection allow for.
+    const _counts = new Map(_categories.map((_c) => [_c, 1]));
+    const _remaining = _lengthPass - _categories.length;
+    for (let _i = 0; _i < _remaining; _i++) {
+        const _category = _categories[(0, random_1._secureRandomInt_)(0, _categories.length)];
+        _counts.set(_category, ((_a = _counts.get(_category)) !== null && _a !== void 0 ? _a : 0) + 1);
+    }
+    let _passwsordGene = "";
+    for (const [_category, _count] of _counts) {
+        const _alphabet = chart_1._CATEGORY_ALPHABETS_[_category];
+        for (let _i = 0; _i < _count; _i++) {
+            _passwsordGene += (0, chart_1._pick_)(_alphabet);
         }
     }
-    for (let _qC of _quantitiesChart) {
-        for (let _i = 0; _i < _qC._qtt; _i++) {
-            switch (_qC._opt) {
-                case "lowercase": {
-                    let _randomIndex = (0, random_1._secureRandomInt_)(1, 26);
-                    _passwsordGene += (0, chart_1._getWordLowerc_)(_randomIndex);
-                    break;
-                }
-                case "uppercase": {
-                    let _randomIndex = (0, random_1._secureRandomInt_)(1, 26);
-                    _passwsordGene += (0, chart_1._getWordUpperc_)(_randomIndex);
-                    break;
-                }
-                case "number": {
-                    let _randomIndex = (0, random_1._secureRandomInt_)(1, 101);
-                    _randomIndex = Math.round(_randomIndex / 10);
-                    _passwsordGene += (0, chart_1._getNumber_)(_randomIndex);
-                    break;
-                }
-                case "special": {
-                    let _randomIndex = (0, random_1._secureRandomInt_)(1, 6);
-                    _passwsordGene += (0, chart_1._getSpecial_)(_randomIndex);
-                    break;
-                }
-            }
-        }
-    }
-    _passwsordGene = (0, permuter_1._shuffle_)(_passwsordGene);
-    return _passwsordGene;
+    return (0, permuter_1._shuffle_)(_passwsordGene);
 };
 exports.default = { build };

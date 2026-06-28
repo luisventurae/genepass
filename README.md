@@ -6,7 +6,9 @@ Generate a random customizable passwords
 
 # Security
 
-Since v2.1.0, password generation is cryptographically secure. Requires Node.js `>=14.10.0`.
+**Since v2.1.0, password generation is cryptographically secure. Requires Node.js `>=14.10.0`.**
+
+Every character is drawn uniformly from its full alphabet (no character is more or less likely than any other), and when more than one category is requested, how many characters come from each category is randomized too — not split evenly — so the category layout itself doesn't leak information.
 
 # Installation
 
@@ -66,7 +68,7 @@ const password = genepass.create(12) // length, required attribute
  * /
 ```
 
-`genepass.Builder` is also exported directly, so `new genepass.Builder()` works the same as `genepass.create()`.
+`genepass.Builder` is also exported directly, so `new genepass.Builder(12)` works the same as `genepass.create(12)`.
 
 # Supported attributes
 
