@@ -1,8 +1,11 @@
 # Genepass v2.1.0
 
 ![Generic badge](https://img.shields.io/badge/Version-2.1.0-green.svg)
+![Dependencies badge](https://img.shields.io/badge/dependencies-0-brightgreen.svg)
 
 Generate a random customizable passwords
+
+> **⚡ Zero dependencies.** This library has **NO runtime dependencies** — nothing is pulled into your `node_modules`. It relies only on Node.js built-ins, keeping your install lean, fast and secure.
 
 # Security
 
