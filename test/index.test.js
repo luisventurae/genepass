@@ -129,6 +129,37 @@ _test_(
   },
 );
 
+_test_(
+  "entropy(options) returns length * log2(alphabet size) without generating a password",
+  () => {
+    const bits = genepass.entropy({ length: 6, lowercase: true, uppercase: true });
+    assert.strictEqual(bits, 6 * Math.log2(52));
+  },
+);
+
+_test_(
+  "entropy() is the same for every password built from the same options",
+  () => {
+    const options = { length: 12, lowercase: true, number: true };
+    const expected = 12 * Math.log2(36);
+    assert.strictEqual(genepass.entropy(options), expected);
+    assert.strictEqual(genepass.entropy(options), genepass.entropy(options));
+  },
+);
+
+_test_(
+  "chained builder.entropy() matches legacy entropy(options) for the same configuration",
+  () => {
+    const legacy = genepass.entropy({ length: 16, lowercase: true, special: true });
+    const chained = genepass.create(16).lowercase().special().entropy();
+    assert.strictEqual(legacy, chained);
+  },
+);
+
+_test_("entropy(options) for length 0 is 0 bits", () => {
+  assert.strictEqual(genepass.entropy({ length: 0, lowercase: true }), 0);
+});
+
 // ---------------------------------------------------------------------------
 // Fail path
 // ---------------------------------------------------------------------------
@@ -161,6 +192,15 @@ _test_("throws RangeError when 'length' exceeds the max (2048)", () => {
 _test_("throws RangeError when no character-type option is selected", () => {
   assert.throws(() => genepass.build({ length: 10 }), RangeError);
 });
+
+_test_(
+  "entropy(options) throws RangeError under the same validation rules as build()",
+  () => {
+    assert.throws(() => genepass.entropy({ lowercase: true }), RangeError);
+    assert.throws(() => genepass.entropy({ length: 10 }), RangeError);
+    assert.throws(() => genepass.create(10).entropy(), RangeError);
+  },
+);
 
 _test_(
   "create(length).build() throws RangeError when no character-type option is selected",

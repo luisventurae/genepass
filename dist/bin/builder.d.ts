@@ -49,6 +49,18 @@ declare class Builder {
      * @returns {String} Password generated
      */
     build(): string;
+    /**
+     * Bits of entropy implied by the accumulated options, without generating
+     * a password. Every password `.build()` would produce from this same
+     * configuration has this same entropy.
+     * @returns {Number} Bits of entropy
+     */
+    entropy(): number;
+    /**
+     * Snapshot the accumulated options into a plain `options` object
+     * @returns {Object}
+     */
+    private _toOptions;
 }
 /**
  * Create a new chainable password builder

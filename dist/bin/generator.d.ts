@@ -24,9 +24,29 @@ export interface options {
  * build({length:32, lowercase:true, uppercase:true, number:true, special:true});
  */
 declare const build: (options: options) => string;
-export { build };
+/**
+ * Bits of entropy implied by the given options, assuming every character is
+ * drawn uniformly at random from the union of the selected alphabets:
+ * `H = length * log2(N)`, where `N` is the size of that union. This is a
+ * property of the configuration, not of any one generated password - every
+ * password built from the same options has the same entropy, so this never
+ * needs to actually generate one.
+ * @param {Object}  options Customizable options
+ * @param {Number}  options.length String length
+ * @param {Boolean} [options.lowercase] At least one lowercase
+ * @param {Boolean} [options.uppercase] At least one uppercase
+ * @param {Boolean} [options.number] At least one number
+ * @param {Boolean} [options.special] At least one special character
+ * @returns {Number} Bits of entropy
+ * @example
+ * // returns 28.529...
+ * entropy({length: 6, lowercase: true, uppercase: true});
+ */
+declare const entropy: (options: options) => number;
+export { build, entropy };
 declare const _default: {
     build: (options: options) => string;
+    entropy: (options: options) => number;
 };
 export default _default;
 //# sourceMappingURL=generator.d.ts.map
